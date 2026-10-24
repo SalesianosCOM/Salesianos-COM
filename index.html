@@ -603,7 +603,7 @@ async function decryptAllTels(){ if(!S.telKey) return; for(const col of Object.k
 function telLockBtn(){ if(PUBLIC_MODE) return S.privOpen?`<button class="btn small" data-act="lockTel">${svg("lock")} Ocultar datos protegidos</button>`:`<button class="btn small" data-act="unlockTel">${svg("lock")} Ver teléfonos con código</button>`; return S.telKey?`<button class="btn small" data-act="lockTel">${svg("lock")} Ocultar teléfonos</button>`:`<button class="btn small" data-act="unlockTel">${svg("lock")} Ver teléfonos con código</button>`; }
 function unlockDialog(after){
   showDialog(`<form class="dlg" id="tlForm"><div class="dlg-head"><h2>${PUBLIC_MODE&&!S.privOpen?"Datos protegidos":"Teléfonos protegidos"}</h2><button type="button" class="icon-btn" data-act="closeDlg" aria-label="Cerrar">${svg("x")}</button></div>
-    <div class="dlg-body"><p class="muted">${PUBLIC_MODE&&!S.privOpen?"Los teléfonos de los salesianos y los directorios de formandos y Familia Salesiana están protegidos.":"Los teléfonos de los salesianos y de los formandos están protegidos."} Escribe el código que entrega la Delegación de Comunicaciones.</p>
+    <div class="dlg-body"><p class="muted">${PUBLIC_MODE&&!S.privOpen?"Los teléfonos de los salesianos y el elenco de formandos están protegidos.":"Los teléfonos de los salesianos y de los formandos están protegidos."} Escribe el código que entrega la Delegación de Comunicaciones.</p>
     <div class="field"><label for="tl_code">Código</label><input class="input" id="tl_code" autocomplete="off" autocapitalize="characters" spellcheck="false"></div><p class="err" id="tl_err" hidden></p></div>
     <div class="dlg-foot"><button type="button" class="btn" data-act="closeDlg">Cancelar</button><button class="btn primary" type="submit" id="tl_go">Ver teléfonos</button></div></form>`);
   $("#tlForm").addEventListener("submit",async ev=>{ ev.preventDefault(); const code=$("#tl_code").value, er=$("#tl_err");
@@ -1182,7 +1182,7 @@ VIEWS.consejo = function(){
 VIEWS.familia = function(){ return VIEWS.consejo(); };
 if(PUBLIC_MODE){
   const fc=VIEWS.consejo;
-  VIEWS.consejo=()=>{ const tab=S.view==="familia"?"familia":(S.f.cg||"consejo"); if(S.privOpen||tab==="consejo") return fc();
+  VIEWS.consejo=()=>{ const tab=S.view==="familia"?"familia":(S.f.cg||"consejo"); if(S.privOpen||tab==="consejo"||tab==="familia") return fc();
     const tabs=S.view==="familia"?"":`<div class="seg" role="group" aria-label="Sección">${[["consejo","Consejo General"],["familia","Familia Salesiana"],["formandos","Elenco de formandos"]].map(([k,l])=>`<button data-act="cg" data-v="${k}" aria-pressed="${tab===k}">${l}</button>`).join("")}</div>`;
     return tabs+privLock(); };
 }
@@ -1240,7 +1240,13 @@ VIEWS.cumpleanos = function(){
   const cm=new Date().getMonth(), cd=new Date().getDate();
   const byMonth=Array.from({length:12},()=>[]); withBd.forEach(p=>byMonth[p.bd.m].push(p)); byMonth.forEach(l=>l.sort((a,b)=>a.bd.d-b.bd.d));
   const order=[...Array(12).keys()].map(i=>(cm+i)%12);
-  return `${hoy.length?`<section class="bday-today"><div class="cake">${hoy.length}</div><div><p class="eyebrow" style="color:var(--gold)">Cumplen años hoy</p><h2>${hoy.map(p=>esc(p.nombre)).join(", ")}</h2><p class="muted">${hoy.map(p=>esc([p.comunidad,p.bd.age?p.bd.age+" años":""].filter(Boolean).join(", "))).join(" · ")}</p></div></section>`:""}
+  const q=norm(S.q.cumpleanos||"");
+  const search=`<div class="toolbar"><div class="grow"><input class="search" id="s_cumpleanos" data-search="cumpleanos" placeholder="Buscar el cumpleaños de un salesiano (nombre o comunidad)" value="${esc(S.q.cumpleanos||"")}" aria-label="Buscar cumpleaños"></div></div>`;
+  if(q){
+    const res=S.data.salesianos.filter(p=>norm([p.nombre,p.comunidad,p.obra].join(" ")).includes(q)).map(p=>({...p,bd:bdayInfo(p)})).sort((a,b)=>(a.bd?a.bd.days:999)-(b.bd?b.bd.days:999)||a.nombre.localeCompare(b.nombre,"es"));
+    return search+(res.length?`<section class="panel"><div class="panel-head"><h2>Resultados</h2><span class="count">${res.length}</span></div><div class="mini-list">${res.map(p=>`<div class="mini-item"><div class="avatar">${esc(initials(p.nombre))}</div><div class="grow"><div class="t">${esc(p.nombre)}</div><div class="s">${esc([p.comunidad,p.bd&&p.bd.age?(p.bd.days===0?"cumple hoy "+p.bd.age+" años":"cumplirá "+p.bd.age+" años"):""].filter(Boolean).join(" · "))}</div></div>${p.bd?`<span class="chip ${p.bd.days===0?"gold":""}">🎂 ${p.bd.d} de ${MESES[p.bd.m]} · ${esc(relDay(p.bd.days))}</span>`:`<span class="hint">Sin fecha registrada</span>`}</div>`).join("")}</div></section>`:emptyBox("No se encontró ningún salesiano","Revisa el nombre o prueba con el apellido o la comunidad."));
+  }
+  return search+`${hoy.length?`<section class="bday-today"><div class="cake">${hoy.length}</div><div><p class="eyebrow" style="color:var(--gold)">Cumplen años hoy</p><h2>${hoy.map(p=>esc(p.nombre)).join(", ")}</h2><p class="muted">${hoy.map(p=>esc([p.comunidad,p.bd.age?p.bd.age+" años":""].filter(Boolean).join(", "))).join(" · ")}</p></div></section>`:""}
   <section class="panel"><div class="panel-head"><h2>Próximos 30 días</h2><span class="count">${prox.length}</span></div>
     ${prox.length?`<div class="mini-list">${prox.map(p=>`<div class="mini-item"><div class="avatar">${esc(initials(p.nombre))}</div><div class="grow"><div class="t">${esc(p.nombre)}</div><div class="s">${esc([p.comunidad,p.bd.age?"cumple "+p.bd.age+" años":""].filter(Boolean).join(" · "))}</div></div><span class="chip">${esc(relDay(p.bd.days))} · ${p.bd.d} ${MES3[p.bd.m].toLowerCase()}</span></div>`).join("")}</div>`:'<p class="muted">Nadie cumple años en los próximos 30 días.</p>'}
   </section>
@@ -1504,7 +1510,7 @@ document.addEventListener("click", async e=>{
   else if(a==="salClear"){ S.f.com=""; S.f.salObra=""; render(); }
   else if(a==="unlockTel"){ unlockDialog(); }
   else if(a==="unlockTelForm"){ const ed=editing; unlockDialog(()=>openForm(ed.col,ed.id)); }
-  else if(a==="lockTel"){ S.telKey=null; S.telCache.clear(); if(PUBLIC_MODE){ S.privOpen=false; ["formandos","familia"].forEach(k=>S.data[k]=[]); shell(); } toast(PUBLIC_MODE?"Datos ocultos":"Teléfonos ocultos"); render(); }
+  else if(a==="lockTel"){ S.telKey=null; S.telCache.clear(); if(PUBLIC_MODE){ S.privOpen=false; ["formandos"].forEach(k=>S.data[k]=[]); shell(); } toast(PUBLIC_MODE?"Datos ocultos":"Teléfonos ocultos"); render(); }
   else if(a==="goFormandos"){ S.view="consejo"; S.f.cg="formandos"; render(); window.scrollTo(0,0); }
   else if(a==="calHelp"){ showDialog(`<div class="dlg"><div class="dlg-head"><h2>Suscribirte al calendario</h2><button type="button" class="icon-btn" data-act="closeDlg" aria-label="Cerrar">${svg("x")}</button></div><div class="dlg-body">
     <p>Primero toca <b>Copiar enlace de suscripción</b>. Después:</p>
