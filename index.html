@@ -922,12 +922,12 @@ function areasDe(a){
 function actForArea(a,area){ return !area||areasDe(a).includes(area); }
 function areaSelect(id){ const cur=S.f.areaF||""; return `<select class="input obra-filter" id="${id}" data-act-area="1" aria-label="Filtrar por delegación o área"><option value="">Todas las áreas y delegaciones</option>${AREA_NAMES.map(n=>`<option ${cur===n?"selected":""}>${esc(n)}</option>`).join("")}</select>`; }
 function areaChips(a){ return areasDe(a).slice(0,2).map(n=>`<span class="chip">${esc(n)}</span>`).join(""); }
-function actForObra(a,obra){ if(!obra) return true; const o=obrasDe(a); return !o.length||o.includes(obra); }
+function actForObra(a,obra){ if(!obra) return true; const o=obrasDe(a); if(obra==="__insp") return !o.length; return o.includes(obra); }
 function obraSelect(id){
   const cur=S.f.obraF||"";
   const groups={}; S.data.obras.forEach(o=>{ (groups[o.ciudad||"Otras"]=groups[o.ciudad||"Otras"]||[]).push(o); });
   const cities=Object.keys(groups).sort((a,b)=>a.localeCompare(b,"es"));
-  return `<select class="input obra-filter" id="${id}" data-act-obra="1" aria-label="Filtrar por obra"><option value="">Todas las obras</option>${cities.map(c=>`<optgroup label="${esc(c)}">${groups[c].sort((a,b)=>a.nombre.localeCompare(b.nombre,"es")).map(o=>`<option value="${esc(o.id)}" ${cur===o.id?"selected":""}>${esc(o.nombre)}</option>`).join("")}</optgroup>`).join("")}</select>`;
+  return `<select class="input obra-filter" id="${id}" data-act-obra="1" aria-label="Filtrar por obra"><option value="">Todas las obras</option><option value="__insp" ${cur==="__insp"?"selected":""}>Toda la inspectoría (inspectoriales)</option>${cities.map(c=>`<optgroup label="${esc(c)}">${groups[c].sort((a,b)=>a.nombre.localeCompare(b.nombre,"es")).map(o=>`<option value="${esc(o.id)}" ${cur===o.id?"selected":""}>${esc(o.nombre)}</option>`).join("")}</optgroup>`).join("")}</select>`;
 }
 function obraChips(a){
   const o=obrasDe(a);
