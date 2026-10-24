@@ -153,6 +153,7 @@ select.input,.input{box-sizing:border-box;padding:8px 10px;border:1px solid var(
 .act-date::first-letter{text-transform:uppercase}
 .cal-panel{display:flex;gap:14px;align-items:center;flex-wrap:wrap;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:14px 16px}
 .cal-panel .grow{flex:1 1 260px;min-width:0;display:flex;flex-direction:column;gap:2px}
+.incl-insp{display:inline-flex;align-items:center;gap:6px;font-size:.85rem;color:var(--ink);cursor:pointer;white-space:nowrap}.incl-insp input{width:16px;height:16px;accent-color:var(--red,#E30613)}
 .cal-url{font-size:.78rem;color:var(--muted);overflow-wrap:anywhere;user-select:all}
 .datebox.past .m{background:var(--muted)}
 .month-head{font-family:var(--f-display);font-size:1.2rem;font-weight:400;font-synthesis:none;color:var(--accent);text-transform:capitalize;padding-top:6px;display:flex;gap:10px;align-items:baseline}
@@ -542,7 +543,7 @@ const VIEW_TITLES = {inicio:"Inicio",cronograma:"Cronograma",cumpleanos:"Cumplea
 const S = {
   db:null,user:null,assets:null,downloads:null,uid:null,me:null,role:"member",member:null,
   data:{actividades:[],salesianos:[],colaboradores:[],obras:[],boletines:[],evangelio:[],members:[],bloqueados:[],subs:[],correos:[],consejo:[],familia:[],formandos:[],necrologio:[],sgi:[],config:[]},
-  loaded:{}, view:"inicio", q:{}, f:{obraF:ls("obraF",""),areaF:(v=>({"Pastoral Juvenil":"Pastoral Juvenil y MJS"})[v]||v)(ls("areaF","")),cron:"proximas",cat:"",insp:"",tipo:"",adminTab:"miembros"},
+  loaded:{}, view:"inicio", q:{}, f:{obraF:ls("obraF",""),inclInsp:ls("inclInsp","")==="1",areaF:(v=>({"Pastoral Juvenil":"Pastoral Juvenil y MJS"})[v]||v)(ls("areaF","")),cron:"proximas",cat:"",insp:"",tipo:"",adminTab:"miembros"},
   profiles:{}, telKey:null, telCache:new Map(), alertsOpen:false, prevVisit:null, writeChain:Promise.resolve()
 };
 
@@ -922,12 +923,12 @@ function areasDe(a){
 function actForArea(a,area){ return !area||areasDe(a).includes(area); }
 function areaSelect(id){ const cur=S.f.areaF||""; return `<select class="input obra-filter" id="${id}" data-act-area="1" aria-label="Filtrar por delegación o área"><option value="">Todas las áreas y delegaciones</option>${AREA_NAMES.map(n=>`<option ${cur===n?"selected":""}>${esc(n)}</option>`).join("")}</select>`; }
 function areaChips(a){ return areasDe(a).slice(0,2).map(n=>`<span class="chip">${esc(n)}</span>`).join(""); }
-function actForObra(a,obra){ if(!obra) return true; const o=obrasDe(a); if(obra==="__insp") return !o.length; return o.includes(obra); }
+function actForObra(a,obra){ if(!obra) return true; const o=obrasDe(a); if(obra==="__insp") return !o.length; return o.includes(obra)||(!!S.f.inclInsp&&!o.length); }
 function obraSelect(id){
   const cur=S.f.obraF||"";
   const groups={}; S.data.obras.forEach(o=>{ (groups[o.ciudad||"Otras"]=groups[o.ciudad||"Otras"]||[]).push(o); });
   const cities=Object.keys(groups).sort((a,b)=>a.localeCompare(b,"es"));
-  return `<select class="input obra-filter" id="${id}" data-act-obra="1" aria-label="Filtrar por obra"><option value="">Todas las obras</option><option value="__insp" ${cur==="__insp"?"selected":""}>Toda la inspectoría (inspectoriales)</option>${cities.map(c=>`<optgroup label="${esc(c)}">${groups[c].sort((a,b)=>a.nombre.localeCompare(b.nombre,"es")).map(o=>`<option value="${esc(o.id)}" ${cur===o.id?"selected":""}>${esc(o.nombre)}</option>`).join("")}</optgroup>`).join("")}</select>`;
+  return `<select class="input obra-filter" id="${id}" data-act-obra="1" aria-label="Filtrar por obra"><option value="">Todas las obras</option><option value="__insp" ${cur==="__insp"?"selected":""}>Toda la inspectoría (inspectoriales)</option>${cities.map(c=>`<optgroup label="${esc(c)}">${groups[c].sort((a,b)=>a.nombre.localeCompare(b.nombre,"es")).map(o=>`<option value="${esc(o.id)}" ${cur===o.id?"selected":""}>${esc(o.nombre)}</option>`).join("")}</optgroup>`).join("")}</select>${cur&&cur!=="__insp"?`<label class="incl-insp"><input type="checkbox" data-act-incl="1" ${S.f.inclInsp?"checked":""}> + actividades de toda la inspectoría</label>`:""}`;
 }
 function obraChips(a){
   const o=obrasDe(a);
@@ -1495,7 +1496,7 @@ document.addEventListener("click", async e=>{
   }
 });
 document.addEventListener("input", e=>{ const t=e.target; if(t.dataset&&t.dataset.search!==undefined){ S.q[t.dataset.search]=t.value; schedule(); } });
-document.addEventListener("change", e=>{ const t=e.target; if(t.dataset&&t.dataset.actObra){ S.f.obraF=t.value; lsSet("obraF",t.value); render(); return; } if(t.dataset&&t.dataset.actArea){ S.f.areaF=t.value; lsSet("areaF",t.value); render(); return; } if(t.dataset&&t.dataset.filter){ S.f[t.dataset.filter]=t.value; render(); } if(t.id==="csvFile"&&t.files[0]) importCSV(t.dataset.col,t.files[0]); if(t.id==="bannerFile"&&t.files[0]) uploadBanner(t.dataset.tipo,t.files[0]); });
+document.addEventListener("change", e=>{ const t=e.target; if(t.dataset&&t.dataset.actIncl){ S.f.inclInsp=t.checked; lsSet("inclInsp",t.checked?"1":""); render(); return; } if(t.dataset&&t.dataset.actObra){ S.f.obraF=t.value; lsSet("obraF",t.value); render(); return; } if(t.dataset&&t.dataset.actArea){ S.f.areaF=t.value; lsSet("areaF",t.value); render(); return; } if(t.dataset&&t.dataset.filter){ S.f[t.dataset.filter]=t.value; render(); } if(t.id==="csvFile"&&t.files[0]) importCSV(t.dataset.col,t.files[0]); if(t.id==="bannerFile"&&t.files[0]) uploadBanner(t.dataset.tipo,t.files[0]); });
 async function uploadBanner(tipo,file){
   if(!S.assets){ toast("Necesitas permiso de Editor para subir imágenes."); return; }
   if(file.size>20*1024*1024){ toast("La imagen supera 20 MB. Redúcela e inténtalo de nuevo."); return; }
