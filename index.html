@@ -222,6 +222,37 @@ select.input,.input{box-sizing:border-box;padding:8px 10px;border:1px solid var(
 .cal-url{font-size:.78rem;color:var(--muted);overflow-wrap:anywhere;user-select:all}
 .datebox.past .m{background:var(--muted)}
 .month-head{font-family:var(--f-display);font-size:1.2rem;font-weight:400;font-synthesis:none;color:var(--accent);text-transform:capitalize;padding-top:6px;display:flex;gap:10px;align-items:baseline}
+/* color por mes (colores complementarios de la marca) */
+.mc1{--mc-bg:#91422B;--mc-ink:#FFFFFF;--mc-t:#91422B}
+.mc2{--mc-bg:#FFA415;--mc-ink:#2D2D2D;--mc-t:#A65F00}
+.mc3{--mc-bg:#C9546B;--mc-ink:#FFFFFF;--mc-t:#B0405A}
+.mc4{--mc-bg:#2D2D2D;--mc-ink:#FFFFFF;--mc-t:#2D2D2D}
+.mc5{--mc-bg:#A65F00;--mc-ink:#FFFFFF;--mc-t:#A65F00}
+.mc6{--mc-bg:#FFBBC6;--mc-ink:#2D2D2D;--mc-t:#A63A55}
+.mc7{--mc-bg:#6B2F1F;--mc-ink:#FFFFFF;--mc-t:#6B2F1F}
+.mc8{--mc-bg:#FFD89F;--mc-ink:#2D2D2D;--mc-t:#8A5300}
+.mc9{--mc-bg:#7A5C4F;--mc-ink:#FFFFFF;--mc-t:#6E5246}
+.mc10{--mc-bg:#E8892B;--mc-ink:#2D2D2D;--mc-t:#9A5200}
+.mc11{--mc-bg:#8C2F45;--mc-ink:#FFFFFF;--mc-t:#8C2F45}
+.mc12{--mc-bg:#4A3B33;--mc-ink:#FFFFFF;--mc-t:#4A3B33}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .mc1{--mc-bg:#B85A3E;--mc-ink:#FFFFFF;--mc-t:#E0937C} :root:not([data-theme="light"]) .mc2{--mc-bg:#FFA415;--mc-ink:#2D2D2D;--mc-t:#FFB84D} :root:not([data-theme="light"]) .mc3{--mc-bg:#C9546B;--mc-ink:#FFFFFF;--mc-t:#FF9DB0} :root:not([data-theme="light"]) .mc4{--mc-bg:#5A4F48;--mc-ink:#FFFFFF;--mc-t:#E6DCD3} :root:not([data-theme="light"]) .mc5{--mc-bg:#B86E0A;--mc-ink:#FFFFFF;--mc-t:#FFD89F} :root:not([data-theme="light"]) .mc6{--mc-bg:#FFBBC6;--mc-ink:#2D2D2D;--mc-t:#FFBBC6} :root:not([data-theme="light"]) .mc7{--mc-bg:#8A4430;--mc-ink:#FFFFFF;--mc-t:#D9A08C} :root:not([data-theme="light"]) .mc8{--mc-bg:#FFD89F;--mc-ink:#2D2D2D;--mc-t:#FFD89F} :root:not([data-theme="light"]) .mc9{--mc-bg:#8E7062;--mc-ink:#FFFFFF;--mc-t:#C9B3A6} :root:not([data-theme="light"]) .mc10{--mc-bg:#E8892B;--mc-ink:#2D2D2D;--mc-t:#FFC27A} :root:not([data-theme="light"]) .mc11{--mc-bg:#A8405A;--mc-ink:#FFFFFF;--mc-t:#F0A3B5} :root:not([data-theme="light"]) .mc12{--mc-bg:#6A5649;--mc-ink:#FFFFFF;--mc-t:#E6D5C8}}
+:root[data-theme="dark"] .mc1{--mc-bg:#B85A3E;--mc-ink:#FFFFFF;--mc-t:#E0937C}
+:root[data-theme="dark"] .mc2{--mc-bg:#FFA415;--mc-ink:#2D2D2D;--mc-t:#FFB84D}
+:root[data-theme="dark"] .mc3{--mc-bg:#C9546B;--mc-ink:#FFFFFF;--mc-t:#FF9DB0}
+:root[data-theme="dark"] .mc4{--mc-bg:#5A4F48;--mc-ink:#FFFFFF;--mc-t:#E6DCD3}
+:root[data-theme="dark"] .mc5{--mc-bg:#B86E0A;--mc-ink:#FFFFFF;--mc-t:#FFD89F}
+:root[data-theme="dark"] .mc6{--mc-bg:#FFBBC6;--mc-ink:#2D2D2D;--mc-t:#FFBBC6}
+:root[data-theme="dark"] .mc7{--mc-bg:#8A4430;--mc-ink:#FFFFFF;--mc-t:#D9A08C}
+:root[data-theme="dark"] .mc8{--mc-bg:#FFD89F;--mc-ink:#2D2D2D;--mc-t:#FFD89F}
+:root[data-theme="dark"] .mc9{--mc-bg:#8E7062;--mc-ink:#FFFFFF;--mc-t:#C9B3A6}
+:root[data-theme="dark"] .mc10{--mc-bg:#E8892B;--mc-ink:#2D2D2D;--mc-t:#FFC27A}
+:root[data-theme="dark"] .mc11{--mc-bg:#A8405A;--mc-ink:#FFFFFF;--mc-t:#F0A3B5}
+:root[data-theme="dark"] .mc12{--mc-bg:#6A5649;--mc-ink:#FFFFFF;--mc-t:#E6D5C8}
+.datebox[class*="mc"]:not(.past) .m{background:var(--mc-bg);color:var(--mc-ink)}
+.datebox.big[class*="mc"]{border-color:var(--mc-bg)}
+.datebox.big[class*="mc"] .d{color:var(--mc-t)}
+.month-head[class*="mc"]{color:var(--mc-t)}
+.act[class*="mc"] .act-date{color:var(--mc-t)}
 .act{display:flex;gap:14px;align-items:flex-start;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:14px}
 .act.cancel{opacity:.75}
 .act.cancel h3{text-decoration:line-through}
@@ -946,7 +977,7 @@ const skel = ()=>`<div style="display:flex;flex-direction:column;gap:10px;paddin
 const emptyBox = (t,s,btn)=>`<div class="empty"><b>${esc(t)}</b><span>${esc(s)}</span>${btn||""}</div>`;
 const DIA3=["DOM","LUN","MAR","MIÉ","JUE","VIE","SÁB"];
 function dateBox(s,past,big,end){ const d=parse(s); if(!d) return ""; const e=end&&end!==s?parse(end):null;
-  return `<div class="datebox ${past?"past":""} ${big?"big":""}" aria-hidden="true"><div class="m">${MES3[d.getMonth()]}${big?" "+d.getFullYear():""}</div><div class="d">${d.getDate()}</div><div class="w">${DIA3[d.getDay()]}</div>${big&&e?`<div class="r">al ${e.getDate()} ${MES3[e.getMonth()].toLowerCase()}</div>`:""}</div>`; }
+  return `<div class="datebox mc${d.getMonth()+1} ${past?"past":""} ${big?"big":""}" aria-hidden="true"><div class="m">${MES3[d.getMonth()]}${big?" "+d.getFullYear():""}</div><div class="d">${d.getDate()}</div><div class="w">${DIA3[d.getDay()]}</div>${big&&e?`<div class="r">al ${e.getDate()} ${MES3[e.getMonth()].toLowerCase()}</div>`:""}</div>`; }
 
 /* obras de cada actividad: lo que no nombra una obra es inspectorial y aplica a todas */
 const OBRA_RULES = [
@@ -1039,10 +1070,10 @@ VIEWS.cronograma = function(){
   html+=`<div class="list">`;
   for(const a of items){
     const d=parse(a.fecha); const key=d?`${MESES[d.getMonth()]} ${d.getFullYear()}`:"Sin fecha";
-    if(key!==cur){ cur=key; html+=`<div class="month-head">${esc(key)}</div>`; }
+    if(key!==cur){ cur=key; html+=`<div class="month-head${d?" mc"+(d.getMonth()+1):""}">${esc(key)}</div>`; }
     const past=(a.fechaFin||a.fecha)<t, n=subCount(a.id), on=!!subs[a.id];
     const dd=diffDays(t,a.fecha);
-    html+=`<article class="act ${a.cancelada?"cancel":""}">${dateBox(a.fecha,past)}
+    html+=`<article class="act ${d?"mc"+(d.getMonth()+1):""} ${a.cancelada?"cancel":""}">${dateBox(a.fecha,past)}
       <div class="act-body">
         <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">${a.categoria?`<span class="chip blue">${esc(a.categoria)}</span>`:""}${obraChips(a)}${areaChips(a)}${a.cancelada?'<span class="chip red">Cancelada</span>':""}${!past&&!a.cancelada&&dd>=0&&dd<=7?`<span class="chip gold">${relDay(dd)}</span>`:""}</div>
         <h3>${esc(a.titulo)}</h3>
@@ -1077,7 +1108,7 @@ function monthView(list){
     <div class="mcal-grid">${["Lun","Mar","Mié","Jue","Vie","Sáb","Dom"].map(x=>`<div class="mcal-dow">${x}</div>`).join("")}${cells}</div>
     <div class="mcal-legend"><span><i></i> De una obra</span><span><i class="insp"></i> De toda la inspectoría</span></div></section>`;
   if(sel){ const ev=byDay[sel]||[];
-    out+=`<div class="month-head" style="text-transform:none">${esc((s=>s.charAt(0).toUpperCase()+s.slice(1))(fmtLong(sel,true)))}</div>`+(ev.length?`<div class="list">${ev.map(a=>`<article class="act ${a.cancelada?"cancel":""}">${dateBox(a.fecha,false,false,a.fechaFin)}<div class="act-body"><div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">${a.categoria?`<span class="chip blue">${esc(a.categoria)}</span>`:""}${obraChips(a)}${areaChips(a)}${a.cancelada?'<span class="chip red">Cancelada</span>':""}</div><h3>${esc(a.titulo)}</h3><div class="act-date">${esc(fmtLong(a.fecha,true))}${a.fechaFin&&a.fechaFin!==a.fecha?" – "+esc(fmtLong(a.fechaFin,true)):""}</div><div class="act-meta">${a.hora?`<span class="mono">${esc(a.hora)}${a.horaFin?"–"+esc(a.horaFin):""}</span>`:""}${a.lugar?`<span>${esc(a.lugar)}</span>`:""}${a.responsable?`<span>Responsable: ${esc(a.responsable)}</span>`:""}</div>${a.descripcion?`<p class="act-desc">${esc(a.descripcion)}</p>`:""}${a.enlace?`<div class="act-actions"><a class="btn small" href="${esc(safeUrl(a.enlace))}" target="_blank" rel="noopener">Abrir enlace</a></div>`:""}</div></article>`).join("")}</div>`:`<p class="muted">No hay actividades este día.</p>`);
+    out+=`<div class="month-head mc${M}" style="text-transform:none">${esc((s=>s.charAt(0).toUpperCase()+s.slice(1))(fmtLong(sel,true)))}</div>`+(ev.length?`<div class="list">${ev.map(a=>`<article class="act mc${(parse(a.fecha)||m0).getMonth()+1} ${a.cancelada?"cancel":""}">${dateBox(a.fecha,false,false,a.fechaFin)}<div class="act-body"><div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">${a.categoria?`<span class="chip blue">${esc(a.categoria)}</span>`:""}${obraChips(a)}${areaChips(a)}${a.cancelada?'<span class="chip red">Cancelada</span>':""}</div><h3>${esc(a.titulo)}</h3><div class="act-date">${esc(fmtLong(a.fecha,true))}${a.fechaFin&&a.fechaFin!==a.fecha?" – "+esc(fmtLong(a.fechaFin,true)):""}</div><div class="act-meta">${a.hora?`<span class="mono">${esc(a.hora)}${a.horaFin?"–"+esc(a.horaFin):""}</span>`:""}${a.lugar?`<span>${esc(a.lugar)}</span>`:""}${a.responsable?`<span>Responsable: ${esc(a.responsable)}</span>`:""}</div>${a.descripcion?`<p class="act-desc">${esc(a.descripcion)}</p>`:""}${a.enlace?`<div class="act-actions"><a class="btn small" href="${esc(safeUrl(a.enlace))}" target="_blank" rel="noopener">Abrir enlace</a></div>`:""}</div></article>`).join("")}</div>`:`<p class="muted">No hay actividades este día.</p>`);
   } else out+=`<p class="muted" style="margin-top:12px">Toca un día para ver sus actividades.</p>`;
   return out;
 }
