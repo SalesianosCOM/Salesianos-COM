@@ -222,37 +222,26 @@ select.input,.input{box-sizing:border-box;padding:8px 10px;border:1px solid var(
 .cal-url{font-size:.78rem;color:var(--muted);overflow-wrap:anywhere;user-select:all}
 .datebox.past .m{background:var(--muted)}
 .month-head{font-family:var(--f-display);font-size:1.2rem;font-weight:400;font-synthesis:none;color:var(--accent);text-transform:capitalize;padding-top:6px;display:flex;gap:10px;align-items:baseline}
-/* color por mes (colores complementarios de la marca) */
-.mc1{--mc-bg:#91422B;--mc-ink:#FFFFFF;--mc-t:#91422B}
-.mc2{--mc-bg:#FFA415;--mc-ink:#2D2D2D;--mc-t:#A65F00}
-.mc3{--mc-bg:#C9546B;--mc-ink:#FFFFFF;--mc-t:#B0405A}
-.mc4{--mc-bg:#2D2D2D;--mc-ink:#FFFFFF;--mc-t:#2D2D2D}
-.mc5{--mc-bg:#A65F00;--mc-ink:#FFFFFF;--mc-t:#A65F00}
-.mc6{--mc-bg:#FFBBC6;--mc-ink:#2D2D2D;--mc-t:#A63A55}
-.mc7{--mc-bg:#6B2F1F;--mc-ink:#FFFFFF;--mc-t:#6B2F1F}
-.mc8{--mc-bg:#FFD89F;--mc-ink:#2D2D2D;--mc-t:#8A5300}
-.mc9{--mc-bg:#7A5C4F;--mc-ink:#FFFFFF;--mc-t:#6E5246}
-.mc10{--mc-bg:#E8892B;--mc-ink:#2D2D2D;--mc-t:#9A5200}
-.mc11{--mc-bg:#8C2F45;--mc-ink:#FFFFFF;--mc-t:#8C2F45}
-.mc12{--mc-bg:#4A3B33;--mc-ink:#FFFFFF;--mc-t:#4A3B33}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .mc1{--mc-bg:#B85A3E;--mc-ink:#FFFFFF;--mc-t:#E0937C} :root:not([data-theme="light"]) .mc2{--mc-bg:#FFA415;--mc-ink:#2D2D2D;--mc-t:#FFB84D} :root:not([data-theme="light"]) .mc3{--mc-bg:#C9546B;--mc-ink:#FFFFFF;--mc-t:#FF9DB0} :root:not([data-theme="light"]) .mc4{--mc-bg:#5A4F48;--mc-ink:#FFFFFF;--mc-t:#E6DCD3} :root:not([data-theme="light"]) .mc5{--mc-bg:#B86E0A;--mc-ink:#FFFFFF;--mc-t:#FFD89F} :root:not([data-theme="light"]) .mc6{--mc-bg:#FFBBC6;--mc-ink:#2D2D2D;--mc-t:#FFBBC6} :root:not([data-theme="light"]) .mc7{--mc-bg:#8A4430;--mc-ink:#FFFFFF;--mc-t:#D9A08C} :root:not([data-theme="light"]) .mc8{--mc-bg:#FFD89F;--mc-ink:#2D2D2D;--mc-t:#FFD89F} :root:not([data-theme="light"]) .mc9{--mc-bg:#8E7062;--mc-ink:#FFFFFF;--mc-t:#C9B3A6} :root:not([data-theme="light"]) .mc10{--mc-bg:#E8892B;--mc-ink:#2D2D2D;--mc-t:#FFC27A} :root:not([data-theme="light"]) .mc11{--mc-bg:#A8405A;--mc-ink:#FFFFFF;--mc-t:#F0A3B5} :root:not([data-theme="light"]) .mc12{--mc-bg:#6A5649;--mc-ink:#FFFFFF;--mc-t:#E6D5C8}}
-:root[data-theme="dark"] .mc1{--mc-bg:#B85A3E;--mc-ink:#FFFFFF;--mc-t:#E0937C}
-:root[data-theme="dark"] .mc2{--mc-bg:#FFA415;--mc-ink:#2D2D2D;--mc-t:#FFB84D}
-:root[data-theme="dark"] .mc3{--mc-bg:#C9546B;--mc-ink:#FFFFFF;--mc-t:#FF9DB0}
-:root[data-theme="dark"] .mc4{--mc-bg:#5A4F48;--mc-ink:#FFFFFF;--mc-t:#E6DCD3}
-:root[data-theme="dark"] .mc5{--mc-bg:#B86E0A;--mc-ink:#FFFFFF;--mc-t:#FFD89F}
-:root[data-theme="dark"] .mc6{--mc-bg:#FFBBC6;--mc-ink:#2D2D2D;--mc-t:#FFBBC6}
-:root[data-theme="dark"] .mc7{--mc-bg:#8A4430;--mc-ink:#FFFFFF;--mc-t:#D9A08C}
-:root[data-theme="dark"] .mc8{--mc-bg:#FFD89F;--mc-ink:#2D2D2D;--mc-t:#FFD89F}
-:root[data-theme="dark"] .mc9{--mc-bg:#8E7062;--mc-ink:#FFFFFF;--mc-t:#C9B3A6}
-:root[data-theme="dark"] .mc10{--mc-bg:#E8892B;--mc-ink:#2D2D2D;--mc-t:#FFC27A}
-:root[data-theme="dark"] .mc11{--mc-bg:#A8405A;--mc-ink:#FFFFFF;--mc-t:#F0A3B5}
-:root[data-theme="dark"] .mc12{--mc-bg:#6A5649;--mc-ink:#FFFFFF;--mc-t:#E6D5C8}
+/* color por mes: colores complementarios del manual de marca (pág. 11) */
+.mc1{--mc-bg:#FF7110;--mc-ink:#2D2D2D}
+.mc2{--mc-bg:#A1C7FF;--mc-ink:#2D2D2D}
+.mc3{--mc-bg:#63C67F;--mc-ink:#2D2D2D}
+.mc4{--mc-bg:#EFA4FF;--mc-ink:#2D2D2D}
+.mc5{--mc-bg:#FFA515;--mc-ink:#2D2D2D}
+.mc6{--mc-bg:#2D2D2D;--mc-ink:#FFFFFF}
+.mc7{--mc-bg:#FFBBC6;--mc-ink:#2D2D2D}
+.mc8{--mc-bg:#FFD89F;--mc-ink:#2D2D2D}
+.mc9{--mc-bg:#CCE3FF;--mc-ink:#2D2D2D}
+.mc10{--mc-bg:#53F271;--mc-ink:#2D2D2D}
+.mc11{--mc-bg:#FFBB8D;--mc-ink:#2D2D2D}
+.mc12{--mc-bg:#F9DEFF;--mc-ink:#2D2D2D}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .mc6{--mc-bg:#848484;--mc-ink:#FFFFFF}}
+:root[data-theme="dark"] .mc6{--mc-bg:#848484;--mc-ink:#FFFFFF}
 .datebox[class*="mc"]:not(.past) .m{background:var(--mc-bg);color:var(--mc-ink)}
 .datebox.big[class*="mc"]{border-color:var(--mc-bg)}
-.datebox.big[class*="mc"] .d{color:var(--mc-t)}
-.month-head[class*="mc"]{color:var(--mc-t)}
-.act[class*="mc"] .act-date{color:var(--mc-t)}
+.datebox.big[class*="mc"] .d{color:var(--ink)}
+.month-head[class*="mc"]{color:var(--mc-ink);background:var(--mc-bg);width:fit-content;padding:3px 14px;border-radius:999px;margin-top:6px}
+.act[class*="mc"] .act-date{color:var(--ink)}
 .act{display:flex;gap:14px;align-items:flex-start;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:14px}
 .act.cancel{opacity:.75}
 .act.cancel h3{text-decoration:line-through}
