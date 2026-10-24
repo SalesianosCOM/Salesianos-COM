@@ -314,6 +314,7 @@ select.input,.input{box-sizing:border-box;padding:8px 10px;border:1px solid var(
 .bul{display:flex;gap:14px;padding:14px 0;border-top:1px solid var(--line);align-items:flex-start}
 .bul:first-child{border-top:0}
 .bul .n{font-family:var(--f-data);color:var(--muted);width:58px;flex:none}
+.bul-thumb{flex:none;width:58px;display:block}.bul-thumb img{width:58px;border-radius:6px;box-shadow:0 3px 10px rgba(45,45,45,.16);display:block}
 .bul .grow{flex:1;min-width:0;display:flex;flex-direction:column;gap:4px}
 
 /* gospel page */
@@ -1450,9 +1451,13 @@ function boletinView(tipo,label,desc){
   if(!S.loaded.boletines) return html+skel();
   if(!arr.length) return html+emptyBox(`Todavía no hay ediciones de ${label}`, isAdmin()?"Publica la primera con su enlace o subiendo el PDF.":"Cuando se publique la primera edición la verás aquí y recibirás una alerta.");
   const [f,...rest]=arr;
-  html+=`<section class="panel"><p class="eyebrow">Edición más reciente</p><div class="bul-feature">${EXT_IMG&&f.portada?`<img class="bul-cover" src="${esc(f.portada)}" alt="Portada de ${esc(f.titulo)}" loading="lazy" onerror="this.remove()">`:f.numero?`<div class="bul-num">${esc(f.numero)}</div>`:""}<div style="display:flex;flex-direction:column;gap:8px;min-width:0"><h2>${esc(f.titulo)}</h2><p class="muted">${esc(fmtLong(f.fecha,true))}</p>${f.resumen?`<p style="max-width:65ch;white-space:pre-line">${esc(f.resumen)}</p>`:""}${bulLinks(f)}</div></div></section>`;
-  if(rest.length) html+=`<section class="panel"><h3>Ediciones anteriores</h3><div>${rest.map(b=>`<div class="bul"><span class="n">${esc(b.numero?"N.º "+b.numero:"")}</span><div class="grow"><b>${esc(b.titulo)}</b><span class="muted" style="font-size:.85rem">${esc(fmtLong(b.fecha,true))}</span>${b.resumen?`<span style="font-size:.9rem">${esc(b.resumen.slice(0,220))}${b.resumen.length>220?"…":""}</span>`:""}${bulLinks(b)}</div></div>`).join("")}</div></section>`;
+  html+=`<section class="panel"><p class="eyebrow">Edición más reciente</p><div class="bul-feature">${coverSrc(f)?`<a href="${esc(safeUrl(f.enlace||""))}" target="_blank" rel="noopener" aria-label="Leer ${esc(f.titulo)}"><img class="bul-cover" src="${esc(coverSrc(f))}" alt="Carátula de ${esc(f.titulo)}" loading="lazy" onerror="this.closest('a').remove()"></a>`:f.numero?`<div class="bul-num">${esc(f.numero)}</div>`:""}<div style="display:flex;flex-direction:column;gap:8px;min-width:0"><h2>${esc(f.titulo)}</h2><p class="muted">${esc(fmtLong(f.fecha,true))}</p>${f.resumen?`<p style="max-width:65ch;white-space:pre-line">${esc(f.resumen)}</p>`:""}${bulLinks(f)}</div></div></section>`;
+  if(rest.length) html+=`<section class="panel"><h3>Ediciones anteriores</h3><div>${rest.map(b=>`<div class="bul">${coverSrc(b)?`<a class="bul-thumb" href="${esc(safeUrl(b.enlace||""))}" target="_blank" rel="noopener" aria-label="Leer ${esc(b.titulo)}"><img src="${esc(coverSrc(b))}" alt="Carátula de ${esc(b.titulo)}" loading="lazy" onerror="this.parentNode.replaceWith(Object.assign(document.createElement('span'),{className:'n',textContent:${esc(JSON.stringify(b.numero?"N.º "+b.numero:""))}}))"></a>`:`<span class="n">${esc(b.numero?"N.º "+b.numero:"")}</span>`}<div class="grow"><b>${esc(b.titulo)}</b><span class="muted" style="font-size:.85rem">${esc(fmtLong(b.fecha,true))}</span>${b.resumen?`<span style="font-size:.9rem">${esc(b.resumen.slice(0,220))}${b.resumen.length>220?"…":""}</span>`:""}${bulLinks(b)}</div></div>`).join("")}</div></section>`;
   return html;
+}
+function coverSrc(b){
+  if(b.portadaAsset){ const u=blobSrc(b.portadaAsset); if(u) return u; }
+  return EXT_IMG ? (b.portadaLocal||b.portada||"") : "";
 }
 function bulLinks(b){
   return `<div class="act-actions">${b.enlace?`<a class="btn small primary" href="${esc(safeUrl(b.enlace))}" target="_blank" rel="noopener">Leer edición</a>`:""}${b.archivo?`<a class="btn small" href="${esc(blobSrc(b.archivo))}" target="_blank" rel="noopener">Abrir archivo${b.archivoNombre?" ("+esc(b.archivoNombre)+")":""}</a>`:""}${isAdmin()?`<button class="btn small" data-act="edit" data-col="boletines" data-id="${esc(b.id)}">Editar</button><button class="btn small danger" data-act="del" data-col="boletines" data-id="${esc(b.id)}">Eliminar</button>`:""}</div>`;
