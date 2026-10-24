@@ -1,4 +1,4 @@
-name: Actualizar cronograma y noticias
+name: Actualizar cronograma, noticias y boletines
 
 on:
   schedule:
@@ -24,7 +24,7 @@ jobs:
           python-version: "3.12"
       - name: Instalar dependencias
         run: pip install icalendar recurring_ical_events
-      - name: Actualizar data.json (cronograma Outlook + noticias ANS)
+      - name: Actualizar data.json (cronograma Outlook, noticias ANS, InfoCOM y Boletín Salesiano)
         run: |
           cat > /tmp/actualizar.py <<'PY'
           #!/usr/bin/env python3
@@ -205,6 +205,63 @@ jobs:
               pub["noticias"] = sorted(cur.values(), key=lambda n: -int(n.get("orden") or 0))[:20]
               return {"nuevas": nuevas, "total": len(pub["noticias"]), "del_dia": pub["noticias"][0]["titulo"] if pub["noticias"] else ""}
 
+          # ---------- Boletines (Issuu): InfoCOM y Boletín Salesiano ----------
+          ISSUU = {"infocom": ("salesianosmedellin", r"^\s*info\s*com\b"),
+                   "salesiano": ("boletinsalesianocolombia", r"bolet[ií]n")}
+          MESES = ["enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre"]
+          def issuu_cards(raw, user):
+              x = raw.decode("utf-8", "replace"); out = []
+              for c in x.split('data-testid="publication-card"')[1:]:
+                  h = re.search(r'href="/' + re.escape(user) + r'/docs/([^"?#]+)"', c)
+                  ti = re.search(r'publication-card-title"[^>]*>([^<]*)<', c)
+                  d = re.search(r'</a><div[^>]*>([^<]+)</div>', c)
+                  img = re.search(r'<img[^>]+src="(https://image\.isu\.pub/[^"]+)"', c)
+                  if not (h and ti and d): continue
+                  try: fecha = dt.datetime.strptime(d.group(1).strip(), "%B %d, %Y").date().isoformat()
+                  except ValueError: continue
+                  out.append({"slug": h.group(1), "titulo": html.unescape(ti.group(1)).strip(), "fecha": fecha,
+                              "portada": img.group(1) if img else ""})
+              return out
+          def boletin_item(tipo, user, c):
+              t = re.sub(r"\s+", " ", c["titulo"]); slug = c["slug"]
+              if tipo == "infocom":
+                  rest = re.sub(r"(?i)^\s*info\s*com\s*", "", t).strip(" -–")
+                  low = rest.lower()
+                  if any(m in low for m in MESES) and not re.search(r"\d{4}", low): low += " " + c["fecha"][:4]
+                  titulo = ("InfoCOM " + low).strip(); numero = ""
+              else:
+                  m = re.search(r"(?i)ed\.?\s*(\d{3})", t) or re.search(r"(?i)salesiano\s+(\d{3})\b", t) or re.search(r"(?<!\d)(2[6-9]\d|3\d\d)(?!\d)", slug)
+                  numero = m.group(1) if m else ""
+                  titulo = ("Boletín Salesiano Ed. " + numero) if numero else t
+              return {"id": "is-" + re.sub(r"[^A-Za-z0-9_-]", "-", slug)[:60], "tipo": tipo, "titulo": titulo, "numero": numero,
+                      "fecha": c["fecha"], "enlace": f"https://issuu.com/{user}/docs/{slug}", "portada": c["portada"],
+                      "resumen": ("Edición del InfoCOM, boletín informativo de comunicación de los Salesianos COM" if tipo == "infocom"
+                                  else "Edición del Boletín Salesiano Colombia") + ", disponible para leer en Issuu.",
+                      "fuente": "Issuu", "createdAt": NOW, "updatedAt": NOW}
+          def leer_boletines(raws):
+              items = []
+              for tipo, (user, pat) in ISSUU.items():
+                  cards = [c for c in issuu_cards(raws[tipo], user) if re.search(pat, c["titulo"], flags=re.I) and not re.search(r"(?i)novena", c["titulo"])]
+                  if not cards: raise RuntimeError(f"Issuu {user}: no se encontraron ediciones (¿cambió la página?)")
+                  seen = set()
+                  for c in cards:  # vienen de la más reciente a la más antigua
+                      it = boletin_item(tipo, user, c)
+                      key = it["numero"] or it["titulo"].lower()
+                      if key in seen: continue
+                      seen.add(key); items.append(it)
+              return items
+          def norm_link(u): return re.sub(r"[?#].*$", "", str(u or "")).rstrip("/").lower()
+          def sync_boletines(pub, items):
+              cur = pub.setdefault("boletines", [])
+              links = {norm_link(b.get("enlace")) for b in cur}
+              nums = {(b.get("tipo"), str(b.get("numero"))) for b in cur if b.get("numero")}
+              nuevas = []
+              for it in items:
+                  if norm_link(it["enlace"]) in links or (it["numero"] and (it["tipo"], it["numero"]) in nums): continue
+                  cur.append(it); nuevas.append(it["titulo"]); links.add(norm_link(it["enlace"]))
+              cur.sort(key=lambda b: str(b.get("fecha", "")), reverse=True)
+              return {"nuevas": len(nuevas), "titulos": nuevas[:10], "total": len(cur)}
+
           if __name__ == "__main__":
               data = json.load(open(DATA, encoding="utf-8"))
               pub = data["pub"]; rep = {}; ok = True
@@ -223,22 +280,28 @@ jobs:
                   rep["noticias"] = sync_noticias(pub, [get(u, s) for u, s in zip(RSS, srcs)])
               except Exception as ex:
                   rep["noticias"] = {"error": str(ex)}; ok = False
+              try:
+                  braw = {t: get(f"https://issuu.com/{u}") for t, (u, _) in ISSUU.items()}
+                  items = leer_boletines(braw)
+                  json.dump(items, open("boletines.json", "w", encoding="utf-8"), ensure_ascii=False, indent=1)
+                  rep["boletines"] = sync_boletines(pub, items)
+              except Exception as ex:
+                  rep["boletines"] = {"error": str(ex)}; ok = False
               data["generado"] = dt.datetime.now(dt.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
               json.dump(data, open(DATA, "w", encoding="utf-8"), ensure_ascii=False, separators=(",", ":"))
               json.dump(pub.get("noticias", []), open("noticias.json", "w", encoding="utf-8"), ensure_ascii=False, indent=1)
               print(json.dumps(rep, ensure_ascii=False, indent=1))
-
           PY
           python /tmp/actualizar.py data.json
       - name: Guardar cambios
         run: |
           git config user.name "Salesianos COM (automático)"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data.json noticias.json
+          git add data.json noticias.json boletines.json
           if git diff --cached --quiet; then
             echo "Sin cambios."
           else
-            git commit -m "Actualización automática: cronograma y noticias"
+            git commit -m "Actualización automática: cronograma, noticias y boletines"
             git push
             curl -s -X POST -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" -H "Accept: application/vnd.github+json" \
               "https://api.github.com/repos/${{ github.repository }}/pages/builds" || true
