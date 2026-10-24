@@ -237,7 +237,11 @@ jobs:
                       "fecha": c["fecha"], "enlace": f"https://issuu.com/{user}/docs/{slug}", "portada": c["portada"],
                       "resumen": ("Edición del InfoCOM, boletín informativo de comunicación de los Salesianos COM" if tipo == "infocom"
                                   else "Edición del Boletín Salesiano Colombia") + ", disponible para leer en Issuu.",
-                      "fuente": "Issuu", "createdAt": NOW, "updatedAt": NOW}
+                      "fuente": "Issuu", "createdAt": creado(c["fecha"]), "updatedAt": creado(c["fecha"])}
+          def creado(fecha):  # solo las ediciones de los últimos 14 días cuentan como "nuevas" (alertas en la app)
+              try: f = dt.date.fromisoformat(fecha)
+              except ValueError: return NOW
+              return NOW if (TODAY - f).days <= 14 else fecha + "T12:00:00.000Z"
           def leer_boletines(raws):
               items = []
               for tipo, (user, pat) in ISSUU.items():
@@ -259,6 +263,9 @@ jobs:
               for it in items:
                   if norm_link(it["enlace"]) in links or (it["numero"] and (it["tipo"], it["numero"]) in nums): continue
                   cur.append(it); nuevas.append(it["titulo"]); links.add(norm_link(it["enlace"]))
+              for b in cur:  # corrige ediciones antiguas que quedaron marcadas como recientes
+                  if b.get("fuente") == "Issuu" and b.get("fecha") and creado(b["fecha"]) != NOW and str(b.get("createdAt", "")) > b["fecha"] + "T23:59":
+                      b["createdAt"] = b["updatedAt"] = creado(b["fecha"])
               cur.sort(key=lambda b: str(b.get("fecha", "")), reverse=True)
               return {"nuevas": len(nuevas), "titulos": nuevas[:10], "total": len(cur)}
 
