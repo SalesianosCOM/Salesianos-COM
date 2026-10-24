@@ -32,7 +32,7 @@ jobs:
           # 1) Cronograma: lee el calendario publicado de Outlook (ICS) y sincroniza pub.actividades.
           # 2) Noticias: lee los RSS de ANS (infoans.org) y renueva pub.noticias (las 20 mas recientes).
           # Los datos privados (cifrados) y el resto de colecciones no se tocan.
-          import json, re, sys, html, hashlib, unicodedata, datetime as dt, urllib.request, email.utils
+          import json, re, sys, os, html, hashlib, unicodedata, datetime as dt, urllib.request, email.utils
           from zoneinfo import ZoneInfo
           import icalendar, recurring_ical_events
 
@@ -254,6 +254,29 @@ jobs:
                       if key in seen: continue
                       seen.add(key); items.append(it)
               return items
+          def descargar_portadas(items, pub):
+              """Guarda en portadas/<id>.jpg la primera página (carátula) de cada edición y la enlaza."""
+              os.makedirs("portadas", exist_ok=True)
+              por_enlace = {}
+              n = 0
+              for it in items:
+                  if not it.get("portada"): continue
+                  path = f"portadas/{it['id']}.jpg"
+                  if not os.path.exists(path):
+                      try:
+                          raw = get(it["portada"])
+                          if len(raw) > 2000: open(path, "wb").write(raw); n += 1
+                      except Exception as ex:
+                          print("portada no descargada:", it["id"], ex)
+                  if os.path.exists(path):
+                      it["portadaLocal"] = path
+                      por_enlace[norm_link(it["enlace"])] = (it["portada"], path)
+              for b in pub.get("boletines", []):
+                  m = por_enlace.get(norm_link(b.get("enlace")))
+                  if m:
+                      if not b.get("portada"): b["portada"] = m[0]
+                      b["portadaLocal"] = m[1]
+              return n
           def norm_link(u): return re.sub(r"[?#].*$", "", str(u or "")).rstrip("/").lower()
           def sync_boletines(pub, items):
               cur = pub.setdefault("boletines", [])
@@ -290,8 +313,9 @@ jobs:
               try:
                   braw = {t: get(f"https://issuu.com/{u}") for t, (u, _) in ISSUU.items()}
                   items = leer_boletines(braw)
+                  nport = descargar_portadas(items, pub)
                   json.dump(items, open("boletines.json", "w", encoding="utf-8"), ensure_ascii=False, indent=1)
-                  rep["boletines"] = sync_boletines(pub, items)
+                  rep["boletines"] = sync_boletines(pub, items); rep["boletines"]["portadas_nuevas"] = nport
               except Exception as ex:
                   rep["boletines"] = {"error": str(ex)}; ok = False
               data["generado"] = dt.datetime.now(dt.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
@@ -304,7 +328,7 @@ jobs:
         run: |
           git config user.name "Salesianos COM (automático)"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data.json noticias.json boletines.json
+          git add data.json noticias.json boletines.json portadas
           if git diff --cached --quiet; then
             echo "Sin cambios."
           else
