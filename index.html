@@ -12,9 +12,9 @@
 /* Identidad Salesianos COM (manual GMM004): rojo institucional e10613 + crema fcecd7, sectores naranja ffa415, marrón 91422b, rojo profundo ae0f0a, taupe b6aca0.
    Titulares Cal Sans Regular, texto Urbanist. Layout: barra lateral roja con logo en sello circular, columna de trabajo sobre fondo crema. */
 :root{
-  --paper:#FDF5EF; --surface:#FFFFFF; --sunk:#F7ECE2; --ink:#2D2D2D; --muted:#786E63; --line:#EADFD3; --taupe:#B6ACA0;
-  --accent:#E10613; --accent-soft:#FDE4E2; --on-accent:#FFFFFF;
-  --gold:#A65F00; --gold-soft:#FFEBC7; --ok:#23804A; --ok-soft:#DDF3E3; --danger:#AE0F0A; --danger-soft:#FCE1DE;
+  --paper:#FDEDD8; --surface:#FFFFFF; --sunk:#FCECD7; --ink:#2D2D2D; --muted:#848484; --line:#FCECD7; --taupe:#B6ACA0;
+  --accent:#E10613; --accent-soft:#FFBBC6; --on-accent:#FFFFFF;
+  --gold:#FF7110; --gold-soft:#FFD89F; --ok:#2D2D2D; --ok-soft:#63C67F; --danger:#AE0F0A; --danger-soft:#FFBBC6;
   --side:#E10613; --side-ink:#FFFFFF; --side-muted:#FFBBC6; --side-active:#AE0F0A;
   --brown:#91422B; --night:#2D2D2D; --cream:#FCECD7;
   --f-display:"Cal Sans","Urbanist",system-ui,-apple-system,"Segoe UI",sans-serif;
@@ -24,17 +24,17 @@
   --r:12px;
 }
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
-  --paper:#1C1716; --surface:#262020; --sunk:#302827; --ink:#F7EEE7; --muted:#B6ACA0; --line:#3C3230; --taupe:#8F857A;
+  --paper:#1C1716; --surface:#262020; --sunk:#302827; --ink:#FDEDD8; --muted:#B6ACA0; --line:#3C3230; --taupe:#848484;
   --accent:#FF5C63; --accent-soft:#4A1A1B; --on-accent:#1C1716;
-  --gold:#FFB84D; --gold-soft:#3D2C12; --ok:#6FD08C; --ok-soft:#173322; --danger:#FF8A80; --danger-soft:#44201D;
-  --side:#A80E0A; --side-ink:#FFFFFF; --side-muted:#FFBBC6; --side-active:#7E0A07;
-  --brown:#7A3824; --night:#120E0D; --cream:#3A2E25; color-scheme:dark}}
+  --gold:#FFA515; --gold-soft:#3D2C12; --ok:#63C67F; --ok-soft:#173322; --danger:#FFBBC6; --danger-soft:#44201D;
+  --side:#AE0F0A; --side-ink:#FFFFFF; --side-muted:#FFBBC6; --side-active:#91422B;
+  --brown:#91422B; --night:#120E0D; --cream:#3A2E25; color-scheme:dark}}
 :root[data-theme="dark"]{
-  --paper:#1C1716; --surface:#262020; --sunk:#302827; --ink:#F7EEE7; --muted:#B6ACA0; --line:#3C3230; --taupe:#8F857A;
+  --paper:#1C1716; --surface:#262020; --sunk:#302827; --ink:#FDEDD8; --muted:#B6ACA0; --line:#3C3230; --taupe:#848484;
   --accent:#FF5C63; --accent-soft:#4A1A1B; --on-accent:#1C1716;
-  --gold:#FFB84D; --gold-soft:#3D2C12; --ok:#6FD08C; --ok-soft:#173322; --danger:#FF8A80; --danger-soft:#44201D;
-  --side:#A80E0A; --side-ink:#FFFFFF; --side-muted:#FFBBC6; --side-active:#7E0A07;
-  --brown:#7A3824; --night:#120E0D; --cream:#3A2E25; color-scheme:dark}
+  --gold:#FFA515; --gold-soft:#3D2C12; --ok:#63C67F; --ok-soft:#173322; --danger:#FFBBC6; --danger-soft:#44201D;
+  --side:#AE0F0A; --side-ink:#FFFFFF; --side-muted:#FFBBC6; --side-active:#91422B;
+  --brown:#91422B; --night:#120E0D; --cream:#3A2E25; color-scheme:dark}
 
 html,body{height:100%}
 body{background:var(--paper);color:var(--ink);font-family:var(--f-body);font-size:15.5px;font-weight:500;line-height:1.5}
@@ -100,7 +100,7 @@ button,input,select,textarea{font:inherit;color:inherit}
 .link-btn:focus-visible{outline:2px solid var(--accent)}
 .toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
 .toolbar .grow{flex:1 1 220px;min-width:0}
-.search{width:100%;box-sizing:border-box;padding:9px 12px 9px 36px;border:1px solid var(--line);border-radius:8px;background:var(--surface) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' stroke='%238A94A8' stroke-width='2' viewBox='0 0 24 24'%3E%3Ccircle cx='11' cy='11' r='7'/%3E%3Cpath d='m20 20-3.5-3.5'/%3E%3C/svg%3E") no-repeat 11px center}
+.search{width:100%;box-sizing:border-box;padding:9px 12px 9px 36px;border:1px solid var(--line);border-radius:8px;background:var(--surface) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' stroke='%23848484' stroke-width='2' viewBox='0 0 24 24'%3E%3Ccircle cx='11' cy='11' r='7'/%3E%3Cpath d='m20 20-3.5-3.5'/%3E%3C/svg%3E") no-repeat 11px center}
 select.input,.input{box-sizing:border-box;padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:var(--surface);max-width:100%}
 .seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--surface)}
 .seg button{all:unset;cursor:pointer;padding:7px 12px;font-size:.85rem;font-weight:600;color:var(--muted)}
@@ -109,7 +109,7 @@ select.input,.input{box-sizing:border-box;padding:8px 10px;border:1px solid var(
 .seg button:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
 .chip{display:inline-flex;align-items:center;font-size:.72rem;font-weight:600;padding:2px 8px;border-radius:99px;background:var(--sunk);color:var(--muted);white-space:nowrap}
 .chip.blue{background:var(--accent-soft);color:var(--accent)}
-.chip.gold{background:var(--gold-soft);color:var(--gold)}
+.chip.gold{background:var(--gold-soft);color:var(--ink)}
 .chip.red{background:var(--danger-soft);color:var(--danger)}
 .chip.green{background:var(--ok-soft);color:var(--ok)}
 .empty{border:1.5px dashed var(--line);border-radius:var(--r);padding:28px 20px;text-align:center;color:var(--muted);display:flex;flex-direction:column;gap:10px;align-items:center}
@@ -154,7 +154,7 @@ select.input,.input{box-sizing:border-box;padding:8px 10px;border:1px solid var(
 .act-date::first-letter{text-transform:uppercase}
 .cal-panel{display:flex;gap:14px;align-items:center;flex-wrap:wrap;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:14px 16px}
 .cal-panel .grow{flex:1 1 260px;min-width:0;display:flex;flex-direction:column;gap:2px}
-.incl-insp{display:inline-flex;align-items:center;gap:6px;font-size:.85rem;color:var(--ink);cursor:pointer;white-space:nowrap}.incl-insp input{width:16px;height:16px;accent-color:var(--red,#E30613)}
+.incl-insp{display:inline-flex;align-items:center;gap:6px;font-size:.85rem;color:var(--ink);cursor:pointer;white-space:nowrap}.incl-insp input{width:16px;height:16px;accent-color:var(--accent)}
 .mcal{padding:14px}
 .mcal-head{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:10px}
 .mcal-head h2{margin:0 4px;text-transform:capitalize;min-width:9ch;text-align:center}
@@ -168,8 +168,8 @@ select.input,.input{box-sizing:border-box;padding:8px 10px;border:1px solid var(
 .mcal-cell.sel{border:2px solid var(--accent);padding:4px}
 .mcal-n{font-size:.8rem;font-weight:700;color:var(--ink);align-self:flex-start;min-width:22px;height:22px;display:grid;place-items:center;border-radius:11px}
 .mcal-cell.today .mcal-n{background:var(--accent);color:var(--on-accent)}
-.mcal-ev{display:block;font-size:.7rem;line-height:1.25;padding:2px 5px;border-radius:4px;background:#FFF1D6;color:#7A4A00;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.mcal-ev.insp{background:var(--accent-soft);color:var(--accent)}
+.mcal-ev{display:block;font-size:.7rem;line-height:1.25;padding:2px 5px;border-radius:4px;background:#FFD89F;color:#2D2D2D;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mcal-ev.insp{background:var(--accent-soft);color:var(--ink)}
 .mcal-ev.cancel{text-decoration:line-through;opacity:.6}
 .mcal-more{font-size:.68rem;color:var(--muted);font-weight:600;padding-left:3px}
 .mcal-dots{display:none;gap:3px;flex-wrap:wrap;margin-top:auto}
@@ -185,7 +185,7 @@ select.input,.input{box-sizing:border-box;padding:8px 10px;border:1px solid var(
 #mapSvg{display:block;width:100%;height:min(72vh,720px);touch-action:none;cursor:grab;user-select:none;-webkit-user-select:none}
 #mapSvg:active{cursor:grabbing}
 @media (max-width:640px){#mapSvg{height:62vh}}
-.map-sea{fill:color-mix(in srgb,#5B9BD5 16%,var(--paper))}
+.map-sea{fill:color-mix(in srgb,#A1C7FF 35%,var(--paper))}
 .map-nb{fill:var(--paper);stroke:var(--line);stroke-width:.8;vector-effect:non-scaling-stroke}
 .map-deps path{fill:var(--surface);stroke:var(--taupe);stroke-width:.7;stroke-dasharray:3 2;vector-effect:non-scaling-stroke;stroke-linejoin:round}
 .map-deps path.has{fill:color-mix(in srgb,var(--accent) 9%,var(--surface))}
@@ -196,6 +196,9 @@ select.input,.input{box-sizing:border-box;padding:8px 10px;border:1px solid var(
 .map-sea-l{fill:var(--muted);font-size:11px;font-style:italic;letter-spacing:.06em;opacity:.8}
 #mapSvg.zoomed .map-sea-l{display:none}
 .mpin{cursor:pointer;outline:none}
+#mapSvg .lay-o{display:none}#mapSvg.zoomed .lay-o{display:inline}#mapSvg.zoomed .lay-c{display:none}
+#mapSvg .lay-o .mpin-l{display:none}#mapSvg.zoom2 .lay-o .mpin-l{display:inline}
+.mpin-o .mpin-drop{fill:var(--brown)}
 .mpin-drop{fill:var(--accent);stroke:var(--surface);stroke-width:1.6;transition:transform .15s}
 .mpin-n{fill:var(--on-accent);font-size:9px;font-weight:700;pointer-events:none;font-variant-numeric:tabular-nums}
 .mpin-l{fill:var(--ink);font-size:10px;font-weight:700;paint-order:stroke;stroke:var(--surface);stroke-width:3px;stroke-linejoin:round;pointer-events:none}
@@ -216,6 +219,28 @@ select.input,.input{box-sizing:border-box;padding:8px 10px;border:1px solid var(
 .map-obra{display:flex;flex-direction:column;gap:6px;padding:12px;border:1px solid var(--line);border-radius:10px}
 .map-obra h3{margin:0;font-size:1rem}
 .map-obra p{margin:0;font-size:.88rem}
+.gsearch{display:flex;flex-direction:column;gap:6px}
+.gs-label{font-family:var(--f-display);font-size:1.05rem;color:var(--ink)}
+.gs-input{font-size:1rem;padding:12px 14px 12px 38px;border-color:var(--taupe)}
+.gs-groups{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:14px;align-items:start}
+.gs-item{all:unset;box-sizing:border-box;cursor:pointer;display:flex;flex-direction:column;gap:2px;padding:9px 10px;border-radius:8px;width:100%}
+.gs-item:hover{background:var(--sunk)}
+.gs-item:focus-visible{outline:2px solid var(--accent)}
+.gs-item .t{font-weight:700;color:var(--ink)}
+.gs-item .s{font-size:.82rem;color:var(--muted)}
+.news .eyebrow{margin:0}
+.news-card{display:flex;gap:12px;text-decoration:none;color:var(--ink);border:1px solid var(--line);border-radius:10px;padding:12px;background:var(--surface);min-width:0}
+.news-card:hover{border-color:var(--taupe)}
+.news-card img{width:110px;height:78px;object-fit:cover;border-radius:6px;flex:none}
+.news-card.big{border-left:4px solid var(--accent)}
+.news-card.big img{width:180px;height:120px}
+.news-body{display:flex;flex-direction:column;gap:4px;min-width:0}
+.news-meta{font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.news-t{font-weight:700;line-height:1.3}
+.news-card.big .news-t{font-family:var(--f-display);font-weight:400;font-size:1.15rem}
+.news-s{font-size:.9rem;color:var(--muted);display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.news-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:10px}
+@media (max-width:560px){.news-card.big{flex-direction:column}.news-card.big img{width:100%;height:auto;aspect-ratio:16/9}}
 .chip-map svg{width:13px;height:13px;vertical-align:-2px;margin-right:2px}
 .toolbar .btn svg{width:15px;height:15px;vertical-align:-3px}
 .map-obra .btn svg{width:15px;height:15px;vertical-align:-3px}
@@ -314,7 +339,8 @@ th{border-top:0;font-size:.72rem;letter-spacing:.07em;text-transform:uppercase;c
 .sgi-row{grid-template-columns:44px minmax(0,1fr) auto auto}
 .doc-ico{width:40px;height:46px;border-radius:6px;background:var(--cream);color:var(--brown);display:grid;place-items:center;font-weight:800;font-size:.78rem;letter-spacing:.04em}
 .code{color:var(--accent);font-weight:700}
-.sec-0{background:#FDE4E2;color:#AE0F0A}.sec-1{background:#FFE9C2;color:#8A4B00}.sec-2{background:#F6E1DA;color:#91422B}.sec-3{background:#F9DEFF;color:#7B3C8C}.sec-4{background:#E3EEFF;color:#2F5B9A}.sec-5{background:#DDF3E3;color:#23804A}.sec-6{background:#EEEAE5;color:#5E564D}
+/* sectores según el manual de marca (pág. 10) */
+.sec-0{background:#FFA415;color:#2D2D2D}.sec-1{background:#AE0F0A;color:#FFFFFF}.sec-2{background:#AE0F0A;color:#FFFFFF}.sec-3{background:#AE0F0A;color:#FFFFFF}.sec-4{background:#91422B;color:#FFFFFF}.sec-5{background:#AE0F0A;color:#FFFFFF}.sec-6{background:#B6ACA0;color:#2D2D2D}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) [class*="sec-"]{filter:brightness(.82) saturate(1.1)}}
 :root[data-theme="dark"] [class*="sec-"]{filter:brightness(.82) saturate(1.1)}
 .obra-logo{width:64px;height:64px;border-radius:10px;background:#FFFFFF;display:grid;place-items:center;padding:4px;box-sizing:border-box;border:1px solid var(--line)}
@@ -345,9 +371,9 @@ th{border-top:0;font-size:.72rem;letter-spacing:.07em;text-transform:uppercase;c
 .hb-waves{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
 .hb-sticker{position:relative;width:132px;height:auto;flex:none;margin:-6px 0 -14px -4px;filter:drop-shadow(0 4px 8px rgba(60,0,0,.25))}
 .hb-text{position:relative;display:flex;flex-direction:column;gap:4px;min-width:0}
-.hb-eyebrow{font-size:.78rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#FFD3DA}
+.hb-eyebrow{font-size:.78rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#FFBBC6}
 .hb-title{font-family:var(--f-display);font-weight:400;font-synthesis:none;font-size:clamp(2.1rem,5vw,3.4rem);line-height:1;letter-spacing:-.01em}
-.hb-handle{font-size:1rem;font-weight:600;color:#FFE3C2}
+.hb-handle{font-size:1rem;font-weight:600;color:#FCECD7}
 @media (max-width:640px){.home-banner{gap:12px;min-height:118px;padding-inline:12px 16px}.hb-sticker{width:92px}.hb-eyebrow{font-size:.66rem}.hb-handle{font-size:.85rem}}
 .tel-lock{display:inline-flex;align-items:center;gap:6px;font-size:.85rem}.tel-lock svg,.btn svg{width:16px;height:16px;vertical-align:-3px}
 .db-quote{margin:2px 0 4px;padding:10px 14px;border-left:4px solid var(--gold,#FFA415);background:var(--cream);border-radius:0 12px 12px 0;max-width:60ch}
@@ -629,7 +655,7 @@ const VIEW_TITLES = {inicio:"Inicio",mapa:"Mapa de obras salesianas",cronograma:
 
 const S = {
   db:null,user:null,assets:null,downloads:null,uid:null,me:null,role:"member",member:null,
-  data:{actividades:[],salesianos:[],colaboradores:[],obras:[],boletines:[],evangelio:[],members:[],bloqueados:[],subs:[],correos:[],consejo:[],familia:[],formandos:[],necrologio:[],sgi:[],config:[]},
+  data:{actividades:[],salesianos:[],colaboradores:[],obras:[],boletines:[],evangelio:[],members:[],bloqueados:[],subs:[],correos:[],consejo:[],familia:[],formandos:[],necrologio:[],sgi:[],config:[],noticias:[]},
   loaded:{}, view:"inicio", q:{}, f:{cronVista:ls("cronVista","lista"),mes:"",dia:"",obraF:ls("obraF",""),inclInsp:ls("inclInsp","")==="1",areaF:(v=>({"Pastoral Juvenil":"Pastoral Juvenil y MJS"})[v]||v)(ls("areaF","")),cron:"proximas",cat:"",insp:"",tipo:"",adminTab:"miembros"},
   profiles:{}, telKey:null, telCache:new Map(), alertsOpen:false, prevVisit:null, writeChain:Promise.resolve()
 };
@@ -794,6 +820,7 @@ function startApp(){
   listen("necrologio", db.collection("necrologio").orderBy("nombre").limit(1000));
   listen("sgi", db.collection("sgi").orderBy("nombre").limit(1000));
   listen("config", db.collection("config").limit(50));
+  listen("noticias", db.collection("noticias").orderBy("orden","desc").limit(20));
   if(isAdmin()){
     listen("members", db.collection("members").limit(1000));
     listen("bloqueados", db.collection("bloqueados").limit(1000));
@@ -922,6 +949,7 @@ VIEWS.inicio = function(){
   const ev=S.data.evangelio.find(e=>e.fecha===t);
   const fiesta=nextFiesta();
   const lastInfo=S.data.boletines.find(b=>b.tipo==="infocom"), lastBol=S.data.boletines.find(b=>b.tipo==="salesiano");
+  const gq=(S.q.global||"").trim();
   return `
   <section class="home-banner" aria-label="Salesianos COM">
     <svg class="hb-waves" viewBox="0 0 800 220" preserveAspectRatio="none" aria-hidden="true"><path d="M470 -20 C 560 60, 520 140, 640 170 S 820 120, 860 40" fill="none" stroke="#FFBBC6" stroke-width="16" stroke-linecap="round" opacity=".55"/><path d="M-20 200 C 80 120, 200 150, 260 240" fill="none" stroke="#FFA415" stroke-width="18" stroke-linecap="round" opacity=".9"/></svg>
@@ -934,6 +962,7 @@ VIEWS.inicio = function(){
       ${(()=>{ const n=necToday(); return n.length?`<p><span class="eyebrow">Unidos en oración</span><br>Hoy recordamos a <b>${n.map(p=>esc(p.nombre)+(p.an.y?" (†"+p.an.y+")":"")).join(", ")}</b>. <button class="link-btn" data-act="go" data-view="oracion">Ver</button></p>`:""; })()}
       <p class="muted">${fiesta?`Próxima fecha salesiana: <b style="color:var(--ink)">${esc(fiesta.name)}</b>, ${esc(fmtLong(fiesta.date))}.`:""}</p></div>
   </section>
+  ${globalSearchBox()}${gq.length>=2?globalResults(gq):`
   ${soon.length?`<div class="alert-strip">${soon.map(a=>`<div class="alert-row ${a.red?"red":""}"><div class="grow"><b>${esc(a.kind)}.</b> ${esc(a.text)}</div><button class="link-btn" data-act="go" data-view="${a.view}">Ver</button></div>`).join("")}</div>`:""}
   <div class="grid2">
     <section class="panel"><div class="panel-head"><h2>Próximas actividades</h2><button class="link-btn" data-act="go" data-view="cronograma">Ver cronograma</button></div>
@@ -949,7 +978,8 @@ VIEWS.inicio = function(){
   ${gospelCard(ev)}
   <section class="panel"><div class="panel-head"><h2>Boletines recientes</h2></div>
     <div class="grid2">${[["infocom","InfoCom",lastInfo,"infocom"],["boletin","Boletín Salesiano",lastBol,"salesiano"]].map(([v,l,b,t])=>{ const bn=S.data.config.find(c=>c.id==="banner_"+t); return `<button class="home-bul" data-act="go" data-view="${v}" aria-label="Ir a ${l}">${bn&&bn.asset?`<img src="${esc(blobSrc(bn.asset))}" alt="${esc(l)}">`:`<span class="home-bul-txt">${esc(l)}</span>`}<span class="home-bul-cap">${b?`<b>${esc(b.titulo)}</b><span>${esc([b.numero?"N.º "+b.numero:"",fmtLong(b.fecha)].filter(Boolean).join(" · "))}</span>`:`<span>Todavía no hay ediciones publicadas</span>`}<span class="home-bul-go">Abrir ${l} →</span></span></button>`; }).join("")}</div>
-  </section>`;
+  </section>
+  ${newsSection()}`}`;
 };
 
 function gospelCard(ev){
@@ -1111,8 +1141,14 @@ const MAP_REGIONS=[["todo","Toda Colombia",null],["caribe","Costa Caribe",[-76.1
 function mapRegionVB(b){ if(!b) return MAP_FULL.slice(); const [x0,y0]=mapXY(b[3],b[0]),[x1,y1]=mapXY(b[1],b[2]); return [x0,y0,x1-x0,y1-y0]; }
 function mapCities(){
   const by={}; S.data.obras.forEach(o=>{ const c=(o.ciudad||"").trim(); if(!c) return; (by[c]=by[c]||[]).push(o); });
-  return Object.entries(by).map(([c,list])=>{ const g=(list.find(o=>o.lat&&o.lng)&&[+list.find(o=>o.lat&&o.lng).lat,+list.find(o=>o.lat&&o.lng).lng])||CITY_GEO[c]; return g?{c,list:list.sort((a,b)=>a.nombre.localeCompare(b.nombre,"es")),xy:mapXY(g[0],g[1])}:null; }).filter(Boolean).sort((a,b)=>b.list.length-a.list.length);
+  return Object.entries(by).map(([c,list])=>{ const g=CITY_GEO[c]||(list.find(o=>o.lat&&o.lng)&&[+list.find(o=>o.lat&&o.lng).lat,+list.find(o=>o.lat&&o.lng).lng]); return g?{c,list:list.sort((a,b)=>a.nombre.localeCompare(b.nombre,"es")),xy:mapXY(g[0],g[1])}:null; }).filter(Boolean).sort((a,b)=>b.list.length-a.list.length);
 }
+function mapSpots(){
+  const by={};
+  S.data.obras.forEach(o=>{ const c=(o.ciudad||"").trim(); let g=o.lat&&o.lng?[+o.lat,+o.lng]:CITY_GEO[c]; if(!g) return; const k=g[0].toFixed(4)+","+g[1].toFixed(4); (by[k]=by[k]||{g,c,list:[]}).list.push(o); });
+  return Object.values(by).map(x=>({...x,xy:mapXY(x.g[0],x.g[1]),list:x.list.sort((a,b)=>a.nombre.localeCompare(b.nombre,"es"))}));
+}
+const obraCorto=o=>String(o.nombre||"").replace(/\s+–\s+.*$/,"");
 function gmaps(o){ return "https://www.google.com/maps/search/?api=1&query="+encodeURIComponent([o.nombre,(o.direccion||"").replace(/^Sede \d+:\s*/,""),o.ciudad,o.departamento,"Colombia"].filter(Boolean).join(", ")); }
 function gmapsDir(o){ return "https://www.google.com/maps/dir/?api=1&destination="+encodeURIComponent([o.nombre,o.ciudad,"Colombia"].filter(Boolean).join(", ")); }
 VIEWS.mapa = function(){
@@ -1123,7 +1159,7 @@ VIEWS.mapa = function(){
   const pins=cities.map(x=>`<g class="mpin${sel&&sel.c===x.c?" on":""}" data-act="mapCity" data-v="${esc(x.c)}" tabindex="0" role="button" aria-label="${esc(x.c)}: ${x.list.length} ${x.list.length===1?"obra":"obras"}" transform="translate(${x.xy[0].toFixed(1)} ${x.xy[1].toFixed(1)})"><g class="mpin-s"><path class="mpin-drop" d="M0 0C-4-6-9-10-9-16a9 9 0 0 1 18 0c0 6-5 10-9 16z"/><text class="mpin-n" y="-13" text-anchor="middle">${x.list.length}</text><text class="mpin-l" x="11" y="-14">${esc(x.c)}</text></g></g>`).join("");
   const side=sel?`<div class="map-side-head"><div><p class="eyebrow">${esc(sel.list[0].departamento||"")}</p><h2>${esc(sel.c)}</h2><p class="muted">${sel.list.length} ${sel.list.length===1?"obra salesiana":"obras salesianas"}</p></div><button class="icon-btn" data-act="mapCity" data-v="" aria-label="Cerrar">${svg("x")}</button></div>
     <div class="map-list">${sel.list.map(o=>`<article class="map-obra"><div style="display:flex;gap:6px;flex-wrap:wrap">${o.tipo?`<span class="chip">${esc(o.tipo)}</span>`:""}</div><h3>${esc(o.nombre)}</h3>${o.direccion?`<p class="muted">${esc(o.direccion)}</p>`:""}${o.telefono?`<p class="mono">${esc(o.telefono)}</p>`:""}<div class="act-actions"><a class="btn small primary" href="${esc(gmaps(o))}" target="_blank" rel="noopener">${svg("pin")} Ver en Google Maps</a><a class="btn small" href="${esc(gmapsDir(o))}" target="_blank" rel="noopener">Cómo llegar</a></div></article>`).join("")}</div>`
-    :`<div class="map-side-head"><div><p class="eyebrow">Inspectoría San Luis Beltrán</p><h2>${total} obras en ${cities.length} ciudades</h2><p class="muted">Toca un pin o una ciudad para ver los contactos de sus obras en el directorio.</p></div></div>
+    :`<div class="map-side-head"><div><p class="eyebrow">Inspectoría San Luis Beltrán</p><h2>${total} obras en ${cities.length} ciudades</h2><p class="muted">Toca un pin o una ciudad para ver los contactos de sus obras en el directorio. Acércate al mapa para ver cada obra en su ubicación.</p></div></div>
     <div class="map-cities">${cities.map(x=>`<button class="map-city" data-act="mapCity" data-v="${esc(x.c)}"><span>${esc(x.c)}</span><span class="count">${x.list.length}</span></button>`).join("")}</div>`;
   const vb=S.mapVB; const depsOn=new Set(S.data.obras.map(o=>norm(o.departamento||"")).filter(Boolean));
   return `<div class="map-regions"><div class="seg" role="group" aria-label="Región">${MAP_REGIONS.map(([k,l])=>`<button data-act="mapRegion" data-v="${k}" aria-pressed="${(S.f.mapRegion||"todo")===k}">${l}</button>`).join("")}</div></div>
@@ -1136,13 +1172,14 @@ VIEWS.mapa = function(){
       <path class="map-co" d="${MAP_PATHS.Colombia}"/>
       <g class="map-dep-l">${MAP_DEPS.map(d=>`<text x="${d[2][0]}" y="${d[2][1]}" text-anchor="middle">${esc(d[0])}</text>`).join("")}</g>
       <text class="map-sea-l" x="${mapXY(12.1,-77.6)[0]}" y="${mapXY(12.1,-77.6)[1]}">Mar Caribe</text><text class="map-sea-l" x="${mapXY(4.6,-79.0)[0]}" y="${mapXY(4.6,-79.0)[1]}">Océano Pacífico</text>
-      <g id="mapPins">${pins}</g></svg>
+      <g id="mapPins" class="lay-c">${pins}</g>
+      <g id="mapSpots" class="lay-o">${mapSpots().map(x=>`<g class="mpin mpin-o" data-act="mapSpot" data-v="${x.list.map(o=>o.id).join(",")}" data-c="${esc(x.c)}" tabindex="0" role="button" aria-label="${esc(x.list.map(o=>o.nombre).join(", "))}" transform="translate(${x.xy[0].toFixed(2)} ${x.xy[1].toFixed(2)})"><title>${esc(x.list.map(o=>o.nombre).join("\n"))}</title><g class="mpin-s"><path class="mpin-drop" d="M0 0C-4-6-9-10-9-16a9 9 0 0 1 18 0c0 6-5 10-9 16z"/><text class="mpin-n" y="-13" text-anchor="middle">${x.list.length}</text><text class="mpin-l" x="11" y="-14">${esc(obraCorto(x.list[0])+(x.list.length>1?" +"+(x.list.length-1):""))}</text></g></g>`).join("")}</g></svg>
       <div class="map-zoom"><button class="icon-btn" data-act="mapZoom" data-v="in" aria-label="Acercar">+</button><button class="icon-btn" data-act="mapZoom" data-v="out" aria-label="Alejar">−</button></div>
     </section>
     <aside class="map-side panel">${side}</aside>
   </div>`;
 };
-function mapApply(){ const s=document.getElementById("mapSvg"); if(!s) return; const vb=S.mapVB; s.setAttribute("viewBox",vb.map(n=>n.toFixed(1)).join(" ")); const z=Math.max(.08,Math.min(1,vb[2]/MAP_FULL[2])); const r=s.getBoundingClientRect(); const k=r.width?Math.max(vb[2]/r.width,vb[3]/r.height):z; s.querySelectorAll(".mpin-s").forEach(g=>g.setAttribute("transform",`scale(${(k*1.05).toFixed(3)})`)); s.style.setProperty("--dl",(k*10).toFixed(2)+"px"); s.classList.toggle("zoomed",z<.45); }
+function mapApply(){ const s=document.getElementById("mapSvg"); if(!s) return; const vb=S.mapVB; s.setAttribute("viewBox",vb.map(n=>n.toFixed(1)).join(" ")); const z=Math.max(.08,Math.min(1,vb[2]/MAP_FULL[2])); const r=s.getBoundingClientRect(); const k=r.width?Math.max(vb[2]/r.width,vb[3]/r.height):z; s.querySelectorAll(".mpin-s").forEach(g=>g.setAttribute("transform",`scale(${(k*1.05).toFixed(3)})`)); s.style.setProperty("--dl",(k*10).toFixed(2)+"px"); s.classList.toggle("zoomed",z<.45); s.classList.toggle("zoom2",z<.09); }
 function mapZoomBy(f,cx,cy){ const vb=S.mapVB; const w=Math.max(30,Math.min(MAP_FULL[2]*1.4,vb[2]*f)), h=w*vb[3]/vb[2]; cx=cx??vb[0]+vb[2]/2; cy=cy??vb[1]+vb[3]/2; S.mapVB=[cx-(cx-vb[0])*w/vb[2],cy-(cy-vb[1])*h/vb[3],w,h]; mapApply(); }
 (function(){
   let drag=null;
@@ -1153,6 +1190,28 @@ function mapZoomBy(f,cx,cy){ const vb=S.mapVB; const w=Math.max(30,Math.min(MAP_
   document.addEventListener("keydown",e=>{ const g=e.target.closest&&e.target.closest(".mpin"); if(g&&(e.key==="Enter"||e.key===" ")){ e.preventDefault(); g.dispatchEvent(new MouseEvent("click",{bubbles:true})); } });
 })();
 
+/* buscador general */
+const GS_COLS=[["salesianos","Salesianos","salesianos",p=>[p.cargo,p.comunidad,p.obra].filter(Boolean).join(" · ")],["colaboradores","Colaboradores","colaboradores",p=>[p.cargo,p.obra].filter(Boolean).join(" · ")],["obras","Obras","obras",p=>[p.tipo,p.ciudad,p.direccion].filter(Boolean).join(" · ")],["actividades","Cronograma","cronograma",a=>[fmtLong(a.fecha,true),a.lugar].filter(Boolean).join(" · ")],["familia","Familia Salesiana","familia",p=>[p.grupo,p.ciudad].filter(Boolean).join(" · ")],["consejo","Consejo General","consejo",p=>p.cargo||""],["formandos","Formandos","salesianos",p=>[p.etapa,p.comunidad].filter(Boolean).join(" · ")],["necrologio","Unidos en oración","oracion",p=>p.fallecimiento||""]];
+function globalSearchBox(){ return `<section class="gsearch" role="search"><label class="gs-label" for="s_global">Buscar en Salesianos COM</label><div class="gs-wrap"><input class="search gs-input" id="s_global" data-search="global" placeholder="Nombre, obra, comunidad, actividad, ciudad, correo…" value="${esc(S.q.global||"")}" autocomplete="off"></div></section>`; }
+function globalResults(q){
+  const nq=norm(q); let total=0;
+  const groups=GS_COLS.map(([col,label,view,sub])=>{ const arr=(S.data[col]||[]).filter(p=>norm([p.nombre,p.titulo,p.cargo,p.comunidad,p.obra,p.ciudad,p.correo,p.lugar,p.grupo,p.direccion,p.departamento,p.responsable].filter(Boolean).join(" ")).includes(nq)); total+=arr.length; return {col,label,view,sub,arr}; }).filter(g=>g.arr.length);
+  if(!groups.length) return emptyBox("No encontramos resultados","Prueba con otra palabra: un apellido, una ciudad o el nombre de una obra.");
+  return `<p class="count">${total} ${total===1?"resultado":"resultados"} para «${esc(q)}»</p><div class="gs-groups">${groups.map(g=>`<section class="panel gs-group"><div class="panel-head"><h2>${esc(g.label)}</h2><span class="count">${g.arr.length}</span></div><div class="mini-list">${g.arr.slice(0,6).map(p=>`<button class="gs-item" data-act="gsOpen" data-col="${g.col}" data-view="${g.view}" data-q="${esc(p.nombre||p.titulo||"")}" data-fecha="${esc(p.fecha||"")}"><span class="t">${esc(p.nombre||p.titulo||"")}</span><span class="s">${esc(g.sub(p))}</span></button>`).join("")}</div>${g.arr.length>6?`<button class="link-btn" data-act="gsOpen" data-col="${g.col}" data-view="${g.view}" data-q="${esc(q)}">Ver los ${g.arr.length} resultados en ${esc(g.label)}</button>`:""}</section>`).join("")}</div>`;
+}
+/* noticias salesianas del mundo (ANS) */
+const EXT_IMG=/github\.io$/.test(location.hostname);
+function newsSection(){
+  const arr=(S.data.noticias||[]).slice().sort((a,b)=>(+b.orden||0)-(+a.orden||0)||String(b.fecha||"").localeCompare(String(a.fecha||""))).slice(0,7);
+  if(!arr.length) return "";
+  const [top,...rest]=arr;
+  const fdate=s=>{ const d=parse(String(s||"").slice(0,10)); return d?`${d.getDate()} de ${MESES[d.getMonth()]}`:""; };
+  const card=(n,big)=>`<a class="news-card${big?" big":""}" href="${esc(safeUrl(n.enlace))}" target="_blank" rel="noopener">${EXT_IMG&&n.imagen?`<img src="${esc(n.imagen)}" alt="" loading="lazy" onerror="this.remove()">`:""}<div class="news-body"><span class="news-meta">${esc([n.pais,fdate(n.fecha)].filter(Boolean).join(" · "))}</span><span class="news-t">${esc(n.titulo)}</span>${big&&n.resumen?`<span class="news-s">${esc(n.resumen)}</span>`:""}</div></a>`;
+  return `<section class="panel news"><div class="panel-head"><h2>Noticias salesianas del mundo</h2><a class="link-btn" href="https://www.infoans.org/es" target="_blank" rel="noopener">Ver más en ANS</a></div>
+    <p class="eyebrow">La noticia del día</p>${card(top,true)}
+    <div class="news-grid">${rest.map(n=>card(n,false)).join("")}</div>
+    <p class="hint">Fuente: Agencia iNfo Salesiana (ANS). Se actualiza cada día.</p></section>`;
+}
 function safeUrl(u){ u=String(u||"").trim(); if(!u) return ""; if(!/^https?:\/\//i.test(u)) u="https://"+u; return u; }
 
 /* directories */
@@ -1227,7 +1286,9 @@ VIEWS.obras = function(){
   const by=S.f.obrasBy||"ciudad";
   let arr=filterQ("obras",S.data.obras);
   if(S.f.sector) arr=arr.filter(p=>p.sector===S.f.sector);
+  if(S.f.obraIds&&S.f.obraIds.length&&S.f.ciudadF!==S.f.obraCity) S.f.obraIds=null;
   if(S.f.ciudadF) arr=arr.filter(p=>p.ciudad===S.f.ciudadF);
+  const spot=S.f.fromMap&&S.f.obraIds&&S.f.obraIds.length?S.f.obraIds:null; if(spot) arr=arr.filter(p=>spot.includes(p.id));
   const cities=[...new Set(S.data.obras.map(o=>o.ciudad).filter(Boolean))].sort((a,b)=>a.localeCompare(b,"es"));
   const seg=`<div class="seg" role="group" aria-label="Agrupar por">${[["ciudad","Por ciudad"],["sector","Por sector"]].map(([k,l])=>`<button data-act="obrasBy" data-v="${k}" aria-pressed="${by===k}">${l}</button>`).join("")}</div>`;
   const secSel=`<select class="input" id="f_sector" data-filter="sector" aria-label="Sector"><option value="">Todos los sectores</option>${SECTORES.map(i=>`<option ${S.f.sector===i?"selected":""}>${i}</option>`).join("")}</select>`;
@@ -1236,6 +1297,7 @@ VIEWS.obras = function(){
   if(!S.loaded.obras) return html+skel();
   if(!S.data.obras.length) return html+emptyBox("El directorio telefónico está vacío",isAdmin()?"Agrega las obras o importa el listado que ya tienes en Excel.":"El equipo de administración está cargando las obras.");
   const nCities=new Set(arr.map(o=>o.ciudad)).size;
+  if(spot) html+=`<div class="toolbar"><p class="muted" style="margin:0">Mostrando ${arr.length} ${arr.length===1?"obra":"obras"} de este punto del mapa.</p><button class="btn small" data-act="mapAllCity">Ver todas las obras de ${esc(S.f.ciudadF)}</button></div>`;
   html+=`<p class="count">${arr.length} obras en ${nCities} ${nCities===1?"ciudad":"ciudades"}</p>`;
   if(!arr.length) return html+emptyBox("Sin resultados","Prueba con otra ciudad o quita los filtros.");
   const row=o=>`<div class="row">${o.logo?`<div class="obra-logo"><img src="${esc(blobSrc(o.logo))}" alt="Logo ${esc(o.nombre)}" loading="lazy"></div>`:`<div class="avatar sec-${SECTORES.indexOf(o.sector)}" style="border-radius:8px">${esc(initials(o.nombre))}</div>`}
@@ -1268,7 +1330,7 @@ VIEWS.consejo = function(){
     html+=`<p class="muted" style="max-width:65ch">El Consejo General acompaña al Rector Mayor en el gobierno de la Congregación desde la Casa Generalicia en Roma.</p>`+dirToolbar("consejo");
     if(!S.loaded.consejo) return html+skel();
     if(!S.data.consejo.length) return html+emptyBox("Aún no hay datos del Consejo General",isAdmin()?"Agrega al Rector Mayor, su Vicario y los consejeros con sus cargos y contactos.":"El equipo de administración está cargando la información.");
-    const order=["Rector Mayor","Vicario del Rector Mayor"];
+    const order=["Rector Mayor","Vicario del Rector Mayor","Consejero General","Ecónomo General","Consejero Regional"];
     const arr=filterQ("consejo",S.data.consejo).slice().sort((a,b)=>{ const ia=order.findIndex(o=>norm(a.cargo).startsWith(norm(o))),ib=order.findIndex(o=>norm(b.cargo).startsWith(norm(o))); return ((ia<0?9:ia)-(ib<0?9:ib))||String(a.nombre).localeCompare(String(b.nombre),"es"); });
     html+=`<p class="count">${arr.length} de ${S.data.consejo.length}</p>`;
     if(!arr.length) return html+emptyBox("Sin resultados","Prueba con otro nombre o cargo.");
@@ -1314,7 +1376,7 @@ VIEWS.oracion = function(){
     return html+`<p class="count">${arr.length} resultados</p>`+(arr.length?`<div class="dir">${arr.map(p=>genRow("necrologio",p,desc(p),p.comunidad?`<span class="chip">${esc(p.comunidad)}</span>`:"")).join("")}</div>`:emptyBox("Sin resultados","Prueba con otro nombre."));
   }
   const hoy=all.filter(p=>p.an.days===0), sem=all.filter(p=>p.an.days>0&&p.an.days<=7).sort((a,b)=>a.an.days-b.an.days);
-  html+=hoy.length?`<section class="panel" style="background:var(--night);color:#F7EEE7;border-color:var(--night)"><p class="eyebrow" style="color:#FFD89F">Hoy recordamos a</p>${hoy.map(p=>`<div style="display:flex;flex-direction:column;gap:4px"><h2>${esc(p.nombre)}</h2><p style="color:#CFC6BC">${esc(desc(p))}${p.comunidad?" · "+esc(p.comunidad):""}</p>${p.notas?`<p style="white-space:pre-line;max-width:65ch">${esc(p.notas)}</p>`:""}</div>`).join("")}<p style="font-family:var(--f-display);font-size:1.1rem">Dales, Señor, el descanso eterno, y brille para ellos la luz perpetua.</p></section>`
+  html+=hoy.length?`<section class="panel" style="background:var(--night);color:#FDEDD8;border-color:var(--night)"><p class="eyebrow" style="color:#FFD89F">Hoy recordamos a</p>${hoy.map(p=>`<div style="display:flex;flex-direction:column;gap:4px"><h2>${esc(p.nombre)}</h2><p style="color:#B7ADA1">${esc(desc(p))}${p.comunidad?" · "+esc(p.comunidad):""}</p>${p.notas?`<p style="white-space:pre-line;max-width:65ch">${esc(p.notas)}</p>`:""}</div>`).join("")}<p style="font-family:var(--f-display);font-size:1.1rem">Dales, Señor, el descanso eterno, y brille para ellos la luz perpetua.</p></section>`
     :`<section class="panel"><p class="eyebrow">Hoy</p><p>No hay aniversarios de fallecimiento registrados para hoy.</p></section>`;
   if(sem.length) html+=`<section class="panel"><h3>Próximos 7 días</h3><div class="mini-list">${sem.map(p=>`<div class="mini-item"><div class="avatar">${esc(initials(p.nombre))}</div><div class="grow"><div class="t">${esc(p.nombre)}</div><div class="s">${esc(desc(p))}</div></div><span class="chip">${esc(relDay(p.an.days))}</span></div>`).join("")}</div></section>`;
   const cm=new Date().getMonth(), cd=new Date().getDate();
@@ -1610,13 +1672,23 @@ function icsFor(list){
 document.addEventListener("click", async e=>{
   const t=e.target.closest("[data-act]"); if(!t) return;
   const a=t.dataset.act;
-  if(a==="go"){ if(S.f.fromMap&&t.dataset.view!=="obras"){ S.f.fromMap=false; S.f.ciudadF=""; } S.view=t.dataset.view; S.alertsOpen=false; $("#overlay").innerHTML=""; $("#app")&&$("#app").classList.remove("nav-open"); closeDialog(); render(); window.scrollTo(0,0); }
+  if(a==="go"){ if(S.f.fromMap&&t.dataset.view!=="obras"){ S.f.fromMap=false; S.f.ciudadF=""; S.f.obraIds=null; } S.view=t.dataset.view; S.alertsOpen=false; $("#overlay").innerHTML=""; $("#app")&&$("#app").classList.remove("nav-open"); closeDialog(); render(); window.scrollTo(0,0); }
   else if(a==="menu"){ $("#app").classList.toggle("nav-open"); }
   else if(a==="alerts"){ S.alertsOpen=true; renderAlerts(); }
   else if(a==="closeAlerts"){ S.alertsOpen=false; markAllSeen(); $("#overlay").innerHTML=""; render(); }
   else if(a==="seenAll"){ markAllSeen(); render(); }
   else if(a==="cron"){ S.f.cron=t.dataset.v; render(); }
-  else if(a==="mapCity"){ const v=t.dataset.v||""; S.f.mapCity=""; if(v){ S.f.ciudadF=v; S.f.obrasBy="ciudad"; S.f.sector=""; S.q.obras=""; S.f.fromMap=true; S.view="obras"; } render(); window.scrollTo(0,0); }
+  else if(a==="gsOpen"){ const col=t.dataset.col, q=t.dataset.q||""; S.view=t.dataset.view;
+    if(col==="actividades"){ S.q.cronograma=q; S.f.cronVista="lista"; S.f.cron=(t.dataset.fecha&&t.dataset.fecha<today())?"pasadas":"proximas"; S.f.cat=""; S.f.obraF=""; S.f.areaF=""; }
+    else if(col==="formandos"){ S.f.salTab="form"; S.q.formandos=q; S.q.salesianos=q; }
+    else if(col==="salesianos"){ S.f.salTab="sdb"; S.q.salesianos=q; S.f.com=""; S.f.salObra=""; }
+    else if(col==="consejo"){ S.f.cg="consejo"; S.q.consejo=q; }
+    else if(col==="obras"){ S.q.obras=q; S.f.ciudadF=""; S.f.sector=""; S.f.fromMap=false; }
+    else S.q[col]=q;
+    render(); window.scrollTo(0,0); }
+  else if(a==="mapCity"){ const v=t.dataset.v||""; S.f.mapCity=""; S.f.obraIds=null; if(v){ S.f.ciudadF=v; S.f.obrasBy="ciudad"; S.f.sector=""; S.q.obras=""; S.f.fromMap=true; S.view="obras"; } render(); window.scrollTo(0,0); }
+  else if(a==="mapSpot"){ const ids=(t.dataset.v||"").split(",").filter(Boolean); S.f.obraIds=ids; S.f.obraCity=t.dataset.c||""; S.f.ciudadF=t.dataset.c||""; S.f.obrasBy="ciudad"; S.f.sector=""; S.q.obras=""; S.f.fromMap=true; S.view="obras"; render(); window.scrollTo(0,0); }
+  else if(a==="mapAllCity"){ S.f.obraIds=null; render(); }
   else if(a==="mapRegion"){ S.f.mapRegion=t.dataset.v; S.mapVB=mapRegionVB((MAP_REGIONS.find(r=>r[0]===t.dataset.v)||[])[2]); render(); }
   else if(a==="mapZoom"){ mapZoomBy(t.dataset.v==="in"?1/1.5:1.5); }
   else if(a==="cronVista"){ S.f.cronVista=t.dataset.v; lsSet("cronVista",t.dataset.v); render(); }
