@@ -1,0 +1,245 @@
+name: Actualizar cronograma y noticias
+
+on:
+  schedule:
+    - cron: "17 10 * * *"   # 5:17 a. m. hora de Colombia
+    - cron: "17 18 * * *"   # 1:17 p. m. hora de Colombia
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+
+concurrency:
+  group: actualizar
+  cancel-in-progress: false
+
+jobs:
+  actualizar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Instalar dependencias
+        run: pip install icalendar recurring_ical_events
+      - name: Actualizar data.json (cronograma Outlook + noticias ANS)
+        run: |
+          cat > /tmp/actualizar.py <<'PY'
+          #!/usr/bin/env python3
+          # Salesianos COM - actualizacion automatica diaria de data.json (GitHub Actions).
+          # 1) Cronograma: lee el calendario publicado de Outlook (ICS) y sincroniza pub.actividades.
+          # 2) Noticias: lee los RSS de ANS (infoans.org) y renueva pub.noticias (las 20 mas recientes).
+          # Los datos privados (cifrados) y el resto de colecciones no se tocan.
+          import json, re, sys, html, hashlib, unicodedata, datetime as dt, urllib.request, email.utils
+          from zoneinfo import ZoneInfo
+          import icalendar, recurring_ical_events
+
+          DATA = sys.argv[1] if len(sys.argv) > 1 else "data.json"
+          ICS_URL = "https://outlook.office365.com/owa/calendar/02acdab834ce4676857e12695837ac90@salesianos.edu.co/8301883b39d244dc80d4622cf15bd2ba10116462702916673404/calendar.ics"
+          RSS = ["https://www.infoans.org/es/secciones/noticias?format=feed&type=rss",
+                 "https://www.infoans.org/es/secciones/fotonoticias?format=feed&type=rss"]
+          ORIGEN = "Cronograma Inspectorial (Outlook)"
+          BOG = ZoneInfo("America/Bogota")
+          NOW = dt.datetime.now(dt.timezone.utc).strftime("%Y-%m-%dT%H:%M:%S.000Z")
+          TODAY = dt.datetime.now(BOG).date()
+
+          def get(url, src=None):
+              if src: return open(src, "rb").read()
+              req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0 (SalesianosCOM-bot; +https://salesianoscom.github.io/Salesianos-COM/)"})
+              with urllib.request.urlopen(req, timeout=60) as r: return r.read()
+
+          # ---------- Cronograma ----------
+          def norm(s):
+              s = unicodedata.normalize("NFD", str(s or "")).encode("ascii", "ignore").decode().lower()
+              s = re.sub(r"\[en persona\]|\(presencial\)|\[cancelado\]", " ", s)
+              return re.sub(r"[^a-z0-9]+", " ", s).strip()
+          def cat(t):
+              u = t.lower()
+              if "festivo" in u: return "Celebración"
+              if re.search(r"comunicaci|educomunic|video institucional|boletín", u): return "Comunicación"
+              if re.search(r"retiro|ejercicios espirituales", u): return "Retiro"
+              if re.search(r"solemnidad|fiesta|celebración|día de san|santos mártires|domingo de ramos|semana santa|miércoles de ceniza|jueves santo|viernes santo|profesi|centenario|conmemoración|premiación", u): return "Celebración"
+              if re.search(r"^(visita|visista|acompañamiento)", u): return "Visita"
+              if re.search(r"envío|auditor|informe|presupuesto|planeador|autoevaluación|programación", u): return "Gestión"
+              if re.search(r"formación|webinar|curso|master class|formandos|congreso|jornada formativa", u): return "Formación"
+              if re.search(r"vocacional|pjs|misi[oó]n|oratorio|pastoral|mjs|catequ|\bere\b|amigos de orar|juegos", u): return "Pastoral"
+              if re.search(r"reunión|consejo|comisión|\bcif\b|\bcie\b|cifasa|curatori|asamblea|capítulo|cipj", u): return "Reunión"
+              if re.search(r"^encuentro|zonal|eslisa", u): return "Encuentro"
+              return "Otra"
+          KEEP = {"COM","SGIC","SST","PJS","MJS","CIF","CIE","CIFASA","CIPJ","CIPJS","DBT","ITI","EPS","CDB","PJB","CSDS","CCDB","CEDBOS","SDS","SJB","GH","VEXCOM","ERE","ETDH","COB","ADMA","DDHH"}
+          def pretty(t):
+              t = re.sub(r"\s+", " ", t).strip()
+              letters = [c for c in t if c.isalpha()]
+              if letters and sum(c.isupper() for c in letters) / len(letters) > 0.8:
+                  w = [x if x.strip(".,()-:") in KEEP else x.lower() for x in t.split(" ")]
+                  t = " ".join(w); t = t[0].upper() + t[1:]
+              pres = "[En persona]" in t or "[en persona]" in t
+              t = re.sub(r"\s*\[en persona\]\s*", " ", t, flags=re.I).strip()
+              t = re.sub(r"^\[CANCELADO\]\s*", "", t, flags=re.I)
+              return t + (" (presencial)" if pres else "")
+
+          def ics_events(raw):
+              cal = icalendar.Calendar.from_ical(raw)
+              w0, w1 = dt.date(TODAY.year - 1, 1, 1), dt.date(TODAY.year + 2, 12, 31)
+              out = []
+              for e in recurring_ical_events.of(cal).between(w0, w1):
+                  s, en = e.get("DTSTART").dt, (e.get("DTEND").dt if e.get("DTEND") else e.get("DTSTART").dt)
+                  allday = not isinstance(s, dt.datetime)
+                  if not allday:
+                      s = (s if s.tzinfo else s.replace(tzinfo=BOG)).astimezone(BOG)
+                      en = (en if en.tzinfo else en.replace(tzinfo=BOG)).astimezone(BOG)
+                  rid = e.get("RECURRENCE-ID")
+                  uid = str(e.get("UID"))
+                  rec = bool(e.get("RRULE")) or rid is not None
+                  occ = (rid.dt if rid is not None else s)
+                  oid = uid + ("|" + str(occ)[:10] if rec else "")
+                  out.append({"id": oid, "subject": str(e.get("SUMMARY") or "").strip(), "allDay": allday,
+                              "start": s.isoformat()[:16] if not allday else s.isoformat() + "T00:00",
+                              "end": en.isoformat()[:16] if not allday else en.isoformat() + "T00:00",
+                              "location": str(e.get("LOCATION") or "").strip(),
+                              "cancelled": str(e.get("STATUS") or "").upper() == "CANCELLED"})
+              return out
+
+          def fields(e):
+              sd, st = e["start"][:10], e["start"][11:16]
+              ed, et = e["end"][:10], e["end"][11:16]
+              d = {"fecha": sd}
+              if e.get("allDay"):
+                  fin = (dt.date.fromisoformat(ed) - dt.timedelta(days=1)).isoformat()
+                  if fin > sd: d["fechaFin"] = fin
+              else:
+                  if ed > sd: d["fechaFin"] = ed
+                  if not (st == "07:00" and et == "07:30"):
+                      d["hora"] = st
+                      if et and et != st: d["horaFin"] = et
+              if e.get("location"): d["lugar"] = e["location"]
+              if e.get("cancelled") or e["subject"].upper().startswith("[CANCELADO]"): d["cancelada"] = True
+              return d
+
+          def sync_cronograma(pub, raw):
+              ev = ics_events(raw)
+              if len(ev) < 50: raise RuntimeError(f"ICS con muy pocos eventos ({len(ev)}); no se sincroniza")
+              acts = pub.setdefault("actividades", [])
+              outl = [a for a in acts if a.get("origen") == ORIGEN]
+              by_ics = {a["icsId"]: a for a in outl if a.get("icsId")}
+              by_key = {}
+              for a in outl: by_key.setdefault((norm(a.get("titulo")), a.get("fecha")), []).append(a)
+              ids = {a.get("id") for a in acts}
+              used = set(); st = {"nuevas": 0, "cambios": 0, "canceladas": 0}
+              SYNCF = ["titulo", "fecha", "fechaFin", "hora", "horaFin", "lugar", "cancelada"]
+              for e in ev:
+                  f = fields(e); f["titulo"] = pretty(e["subject"])
+                  a = by_ics.get(e["id"])
+                  if a is None:
+                      for c in by_key.get((norm(f["titulo"]), f["fecha"]), []):
+                          if id(c) not in used and (not c.get("icsId") or c["icsId"] == e["id"]): a = c; break
+                  if a is not None:
+                      used.add(id(a)); ch = False
+                      for k in SYNCF:
+                          nv, ov = f.get(k), a.get(k)
+                          if k == "titulo" and norm(nv) == norm(ov): continue
+                          if k == "cancelada": nv, ov = bool(nv), bool(ov)
+                          if (nv or None) != (ov or None):
+                              ch = True
+                              if nv in (None, "", False): a.pop(k, None)
+                              else: a[k] = nv
+                      a["icsId"] = e["id"]
+                      if ch: a["updatedAt"] = NOW; st["cambios"] += 1
+                  else:
+                      nid = "gh-" + hashlib.md5(e["id"].encode()).hexdigest()[:12]
+                      while nid in ids: nid += "x"
+                      ids.add(nid)
+                      nd = dict(f); nd.update(categoria=cat(e["subject"]), origen=ORIGEN, icsId=e["id"], createdAt=NOW, updatedAt=NOW, id=nid)
+                      if not nd.get("cancelada"): nd.pop("cancelada", None)
+                      acts.append(nd); used.add(id(nd)); st["nuevas"] += 1
+              fechas = sorted(x["start"][:10] for x in ev)
+              lo, hi = fechas[0], (dt.date.fromisoformat(fechas[-1]) - dt.timedelta(days=45)).isoformat()
+              for a in outl:
+                  if id(a) in used or a.get("cancelada"): continue
+                  if lo <= a.get("fecha", "") <= hi:
+                      a["cancelada"] = True; a["updatedAt"] = NOW; st["canceladas"] += 1
+              acts.sort(key=lambda a: (a.get("fecha", ""), a.get("hora", "")))
+              st.update(eventos=len(ev), actividades=len(acts))
+              return st
+
+          # ---------- Noticias ANS ----------
+          def clean(h):
+              t = re.sub(r"<[^>]+>", " ", h or ""); t = html.unescape(t)
+              t = re.sub(r"\s+", " ", t).strip()
+              return re.sub(r"\s+([,.;:!?)])", r"\1", t)
+          def resumen(intro):
+              t = clean(intro)
+              t = re.sub(r"^\(ANS\s*[–-][^)]*\)\s*[–-]\s*", "", t)
+              if len(t) <= 230: return t
+              cut = t[:230]
+              m = cut.rfind(". ")
+              return cut[:m + 1] if m > 80 else cut.rsplit(" ", 1)[0] + "…"
+          def parse_rss(raw):
+              x = raw.decode("utf-8", "replace"); out = []
+              for it in re.findall(r"<item>(.*?)</item>", x, flags=re.S):
+                  g = lambda tag: (re.search(rf"<{tag}[^>]*>(.*?)</{tag}>", it, flags=re.S) or [None, ""])[1]
+                  title = html.unescape(re.sub(r"<!\[CDATA\[|\]\]>", "", g("title"))).strip()
+                  link = html.unescape(g("link")).strip()
+                  desc = re.sub(r"^<!\[CDATA\[|\]\]>$", "", g("description").strip())
+                  m = re.search(r"/item/(\d+)-", link)
+                  if not m: continue
+                  num = int(m.group(1))
+                  pais, tit = (title.split(" – ", 1) + [""])[:2] if " – " in title else ("", title)
+                  if not tit: tit, pais = title, ""
+                  img = (re.search(r'<img[^>]+src="([^"]+)"', desc) or [None, ""])[1].replace("_S.jpg", "_M.jpg")
+                  intro = (re.search(r'K2FeedIntroText">(.*?)</div>', desc, flags=re.S) or [None, desc])[1]
+                  try: fecha = email.utils.parsedate_to_datetime(g("pubDate")).astimezone(dt.timezone.utc).strftime("%Y-%m-%dT%H:%M:%S.000Z")
+                  except Exception: fecha = NOW
+                  out.append({"id": f"ans-{num}", "titulo": tit.strip(), "pais": pais.strip(), "enlace": link, "fecha": fecha,
+                              "imagen": img, "resumen": resumen(intro), "orden": num, "fuente": "ANS"})
+              return out
+          def sync_noticias(pub, raws):
+              cur = {n["id"]: n for n in pub.get("noticias", [])}
+              nuevas = 0
+              for raw in raws:
+                  for n in parse_rss(raw):
+                      if n["id"] in cur: continue
+                      cur[n["id"]] = n; nuevas += 1
+              pub["noticias"] = sorted(cur.values(), key=lambda n: -int(n.get("orden") or 0))[:20]
+              return {"nuevas": nuevas, "total": len(pub["noticias"]), "del_dia": pub["noticias"][0]["titulo"] if pub["noticias"] else ""}
+
+          if __name__ == "__main__":
+              data = json.load(open(DATA, encoding="utf-8"))
+              pub = data["pub"]; rep = {}; ok = True
+              try:
+                  rep["cronograma"] = sync_cronograma(pub, get(ICS_URL, (sys.argv[2] if len(sys.argv) > 2 and sys.argv[2] != "-" else None)))
+                  cfg = pub.setdefault("config", [])
+                  so = next((c for c in cfg if c.get("id") == "sync_outlook"), None)
+                  if so is None: so = {"id": "sync_outlook"}; cfg.append(so)
+                  so.update(estado="ok", ultima=dt.datetime.now(dt.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+                            eventos=rep["cronograma"]["eventos"], actividades=rep["cronograma"]["actividades"],
+                            nuevas=rep["cronograma"]["nuevas"], cambios=rep["cronograma"]["cambios"], canceladas=rep["cronograma"]["canceladas"])
+              except Exception as ex:
+                  rep["cronograma"] = {"error": str(ex)}; ok = False
+              try:
+                  srcs = sys.argv[3].split(",") if len(sys.argv) > 3 else [None] * len(RSS)
+                  rep["noticias"] = sync_noticias(pub, [get(u, s) for u, s in zip(RSS, srcs)])
+              except Exception as ex:
+                  rep["noticias"] = {"error": str(ex)}; ok = False
+              data["generado"] = dt.datetime.now(dt.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+              json.dump(data, open(DATA, "w", encoding="utf-8"), ensure_ascii=False, separators=(",", ":"))
+              json.dump(pub.get("noticias", []), open("noticias.json", "w", encoding="utf-8"), ensure_ascii=False, indent=1)
+              print(json.dumps(rep, ensure_ascii=False, indent=1))
+
+          PY
+          python /tmp/actualizar.py data.json
+      - name: Guardar cambios
+        run: |
+          git config user.name "Salesianos COM (automático)"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data.json noticias.json
+          if git diff --cached --quiet; then
+            echo "Sin cambios."
+          else
+            git commit -m "Actualización automática: cronograma y noticias"
+            git push
+            curl -s -X POST -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" -H "Accept: application/vnd.github+json" \
+              "https://api.github.com/repos/${{ github.repository }}/pages/builds" || true
+          fi
