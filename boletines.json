@@ -10,7 +10,8 @@
   "resumen": "Edición del InfoCOM, boletín informativo de comunicación de los Salesianos COM, disponible para leer en Issuu.",
   "fuente": "Issuu",
   "createdAt": "2026-07-01T12:00:00.000Z",
-  "updatedAt": "2026-07-01T12:00:00.000Z"
+  "updatedAt": "2026-07-01T12:00:00.000Z",
+  "portadaLocal": "portadas/is-infocom_junio_2026.jpg"
  },
  {
   "id": "is-infocom_abril_2026",
@@ -23,7 +24,8 @@
   "resumen": "Edición del InfoCOM, boletín informativo de comunicación de los Salesianos COM, disponible para leer en Issuu.",
   "fuente": "Issuu",
   "createdAt": "2026-04-30T12:00:00.000Z",
-  "updatedAt": "2026-04-30T12:00:00.000Z"
+  "updatedAt": "2026-04-30T12:00:00.000Z",
+  "portadaLocal": "portadas/is-infocom_abril_2026.jpg"
  },
  {
   "id": "is-infocom_marzo_2026",
@@ -36,7 +38,8 @@
   "resumen": "Edición del InfoCOM, boletín informativo de comunicación de los Salesianos COM, disponible para leer en Issuu.",
   "fuente": "Issuu",
   "createdAt": "2026-04-30T12:00:00.000Z",
-  "updatedAt": "2026-04-30T12:00:00.000Z"
+  "updatedAt": "2026-04-30T12:00:00.000Z",
+  "portadaLocal": "portadas/is-infocom_marzo_2026.jpg"
  },
  {
   "id": "is-infocom_febrero_d5d3c957c97e3a",
@@ -49,7 +52,8 @@
   "resumen": "Edición del InfoCOM, boletín informativo de comunicación de los Salesianos COM, disponible para leer en Issuu.",
   "fuente": "Issuu",
   "createdAt": "2026-03-02T12:00:00.000Z",
-  "updatedAt": "2026-03-02T12:00:00.000Z"
+  "updatedAt": "2026-03-02T12:00:00.000Z",
+  "portadaLocal": "portadas/is-infocom_febrero_d5d3c957c97e3a.jpg"
  },
  {
   "id": "is-infocom_enero",
@@ -62,7 +66,8 @@
   "resumen": "Edición del InfoCOM, boletín informativo de comunicación de los Salesianos COM, disponible para leer en Issuu.",
   "fuente": "Issuu",
   "createdAt": "2026-01-31T12:00:00.000Z",
-  "updatedAt": "2026-01-31T12:00:00.000Z"
+  "updatedAt": "2026-01-31T12:00:00.000Z",
+  "portadaLocal": "portadas/is-infocom_enero.jpg"
  },
  {
   "id": "is-boletin_salesiano_301",
@@ -75,7 +80,8 @@
   "resumen": "Edición del Boletín Salesiano Colombia, disponible para leer en Issuu.",
   "fuente": "Issuu",
   "createdAt": "2026-08-19T12:00:00.000Z",
-  "updatedAt": "2026-08-19T12:00:00.000Z"
+  "updatedAt": "2026-08-19T12:00:00.000Z",
+  "portadaLocal": "portadas/is-boletin_salesiano_301.jpg"
  },
  {
   "id": "is-boletin_salesiano",
@@ -88,7 +94,8 @@
   "resumen": "Edición del Boletín Salesiano Colombia, disponible para leer en Issuu.",
   "fuente": "Issuu",
   "createdAt": "2026-06-17T12:00:00.000Z",
-  "updatedAt": "2026-06-17T12:00:00.000Z"
+  "updatedAt": "2026-06-17T12:00:00.000Z",
+  "portadaLocal": "portadas/is-boletin_salesiano.jpg"
  },
  {
   "id": "is-bolet_n_salesiano_digital_299",
@@ -101,7 +108,8 @@
   "resumen": "Edición del Boletín Salesiano Colombia, disponible para leer en Issuu.",
   "fuente": "Issuu",
   "createdAt": "2026-03-18T12:00:00.000Z",
-  "updatedAt": "2026-03-18T12:00:00.000Z"
+  "updatedAt": "2026-03-18T12:00:00.000Z",
+  "portadaLocal": "portadas/is-bolet_n_salesiano_digital_299.jpg"
  },
  {
   "id": "is-boletin_salesiano_298",
@@ -114,7 +122,8 @@
   "resumen": "Edición del Boletín Salesiano Colombia, disponible para leer en Issuu.",
   "fuente": "Issuu",
   "createdAt": "2025-11-12T12:00:00.000Z",
-  "updatedAt": "2025-11-12T12:00:00.000Z"
+  "updatedAt": "2025-11-12T12:00:00.000Z",
+  "portadaLocal": "portadas/is-boletin_salesiano_298.jpg"
  },
  {
   "id": "is-boletin_salesiano_297",
@@ -127,7 +136,8 @@
   "resumen": "Edición del Boletín Salesiano Colombia, disponible para leer en Issuu.",
   "fuente": "Issuu",
   "createdAt": "2025-09-24T12:00:00.000Z",
-  "updatedAt": "2025-09-24T12:00:00.000Z"
+  "updatedAt": "2025-09-24T12:00:00.000Z",
+  "portadaLocal": "portadas/is-boletin_salesiano_297.jpg"
  },
  {
   "id": "is-boletin_296_interactivo",
@@ -140,7 +150,8 @@
   "resumen": "Edición del Boletín Salesiano Colombia, disponible para leer en Issuu.",
   "fuente": "Issuu",
   "createdAt": "2025-07-10T12:00:00.000Z",
-  "updatedAt": "2025-07-10T12:00:00.000Z"
+  "updatedAt": "2025-07-10T12:00:00.000Z",
+  "portadaLocal": "portadas/is-boletin_296_interactivo.jpg"
  },
  {
   "id": "is-boletin_salesiano_295",
@@ -153,7 +164,8 @@
   "resumen": "Edición del Boletín Salesiano Colombia, disponible para leer en Issuu.",
   "fuente": "Issuu",
   "createdAt": "2025-04-08T12:00:00.000Z",
-  "updatedAt": "2025-04-08T12:00:00.000Z"
+  "updatedAt": "2025-04-08T12:00:00.000Z",
+  "portadaLocal": "portadas/is-boletin_salesiano_295.jpg"
  },
  {
   "id": "is-boletin_294_6_rgb",
@@ -166,7 +178,8 @@
   "resumen": "Edición del Boletín Salesiano Colombia, disponible para leer en Issuu.",
   "fuente": "Issuu",
   "createdAt": "2024-12-05T12:00:00.000Z",
-  "updatedAt": "2024-12-05T12:00:00.000Z"
+  "updatedAt": "2024-12-05T12:00:00.000Z",
+  "portadaLocal": "portadas/is-boletin_294_6_rgb.jpg"
  },
  {
   "id": "is-boleti_n_ed-293",
@@ -179,7 +192,8 @@
   "resumen": "Edición del Boletín Salesiano Colombia, disponible para leer en Issuu.",
   "fuente": "Issuu",
   "createdAt": "2024-11-06T12:00:00.000Z",
-  "updatedAt": "2024-11-06T12:00:00.000Z"
+  "updatedAt": "2024-11-06T12:00:00.000Z",
+  "portadaLocal": "portadas/is-boleti_n_ed-293.jpg"
  },
  {
   "id": "is-boletin_292_final",
@@ -192,7 +206,8 @@
   "resumen": "Edición del Boletín Salesiano Colombia, disponible para leer en Issuu.",
   "fuente": "Issuu",
   "createdAt": "2024-04-11T12:00:00.000Z",
-  "updatedAt": "2024-04-11T12:00:00.000Z"
+  "updatedAt": "2024-04-11T12:00:00.000Z",
+  "portadaLocal": "portadas/is-boletin_292_final.jpg"
  },
  {
   "id": "is-boletin_291_3_compressed_1_",
@@ -205,7 +220,8 @@
   "resumen": "Edición del Boletín Salesiano Colombia, disponible para leer en Issuu.",
   "fuente": "Issuu",
   "createdAt": "2023-12-02T12:00:00.000Z",
-  "updatedAt": "2023-12-02T12:00:00.000Z"
+  "updatedAt": "2023-12-02T12:00:00.000Z",
+  "portadaLocal": "portadas/is-boletin_291_3_compressed_1_.jpg"
  },
  {
   "id": "is-boletin_290_baja",
@@ -218,7 +234,8 @@
   "resumen": "Edición del Boletín Salesiano Colombia, disponible para leer en Issuu.",
   "fuente": "Issuu",
   "createdAt": "2023-10-20T12:00:00.000Z",
-  "updatedAt": "2023-10-20T12:00:00.000Z"
+  "updatedAt": "2023-10-20T12:00:00.000Z",
+  "portadaLocal": "portadas/is-boletin_290_baja.jpg"
  },
  {
   "id": "is-boletin_289_",
@@ -231,7 +248,8 @@
   "resumen": "Edición del Boletín Salesiano Colombia, disponible para leer en Issuu.",
   "fuente": "Issuu",
   "createdAt": "2023-07-27T12:00:00.000Z",
-  "updatedAt": "2023-07-27T12:00:00.000Z"
+  "updatedAt": "2023-07-27T12:00:00.000Z",
+  "portadaLocal": "portadas/is-boletin_289_.jpg"
  },
  {
   "id": "is-bolet_n_salesiano_288_correcci_n_2",
@@ -244,7 +262,8 @@
   "resumen": "Edición del Boletín Salesiano Colombia, disponible para leer en Issuu.",
   "fuente": "Issuu",
   "createdAt": "2023-04-21T12:00:00.000Z",
-  "updatedAt": "2023-04-21T12:00:00.000Z"
+  "updatedAt": "2023-04-21T12:00:00.000Z",
+  "portadaLocal": "portadas/is-bolet_n_salesiano_288_correcci_n_2.jpg"
  },
  {
   "id": "is-boleti_n_salesiano_287",
@@ -257,7 +276,8 @@
   "resumen": "Edición del Boletín Salesiano Colombia, disponible para leer en Issuu.",
   "fuente": "Issuu",
   "createdAt": "2022-12-02T12:00:00.000Z",
-  "updatedAt": "2022-12-02T12:00:00.000Z"
+  "updatedAt": "2022-12-02T12:00:00.000Z",
+  "portadaLocal": "portadas/is-boleti_n_salesiano_287.jpg"
  },
  {
   "id": "is-boleti_n_salesiano_286_2_",
@@ -270,7 +290,8 @@
   "resumen": "Edición del Boletín Salesiano Colombia, disponible para leer en Issuu.",
   "fuente": "Issuu",
   "createdAt": "2022-09-30T12:00:00.000Z",
-  "updatedAt": "2022-09-30T12:00:00.000Z"
+  "updatedAt": "2022-09-30T12:00:00.000Z",
+  "portadaLocal": "portadas/is-boleti_n_salesiano_286_2_.jpg"
  },
  {
   "id": "is-boleti_n_salesiano_285_",
@@ -283,7 +304,8 @@
   "resumen": "Edición del Boletín Salesiano Colombia, disponible para leer en Issuu.",
   "fuente": "Issuu",
   "createdAt": "2022-07-08T12:00:00.000Z",
-  "updatedAt": "2022-07-08T12:00:00.000Z"
+  "updatedAt": "2022-07-08T12:00:00.000Z",
+  "portadaLocal": "portadas/is-boleti_n_salesiano_285_.jpg"
  },
  {
   "id": "is-bolet_n_salesiano_284",
@@ -296,7 +318,8 @@
   "resumen": "Edición del Boletín Salesiano Colombia, disponible para leer en Issuu.",
   "fuente": "Issuu",
   "createdAt": "2022-03-24T12:00:00.000Z",
-  "updatedAt": "2022-03-24T12:00:00.000Z"
+  "updatedAt": "2022-03-24T12:00:00.000Z",
+  "portadaLocal": "portadas/is-bolet_n_salesiano_284.jpg"
  },
  {
   "id": "is-boleti_n_salesiano_283",
@@ -309,7 +332,8 @@
   "resumen": "Edición del Boletín Salesiano Colombia, disponible para leer en Issuu.",
   "fuente": "Issuu",
   "createdAt": "2021-12-04T12:00:00.000Z",
-  "updatedAt": "2021-12-04T12:00:00.000Z"
+  "updatedAt": "2021-12-04T12:00:00.000Z",
+  "portadaLocal": "portadas/is-boleti_n_salesiano_283.jpg"
  },
  {
   "id": "is-bolet_n_salesiano_282",
@@ -322,7 +346,8 @@
   "resumen": "Edición del Boletín Salesiano Colombia, disponible para leer en Issuu.",
   "fuente": "Issuu",
   "createdAt": "2021-09-27T12:00:00.000Z",
-  "updatedAt": "2021-09-27T12:00:00.000Z"
+  "updatedAt": "2021-09-27T12:00:00.000Z",
+  "portadaLocal": "portadas/is-bolet_n_salesiano_282.jpg"
  },
  {
   "id": "is-bolet_n_salesiano_281_real1_imp",
@@ -335,7 +360,8 @@
   "resumen": "Edición del Boletín Salesiano Colombia, disponible para leer en Issuu.",
   "fuente": "Issuu",
   "createdAt": "2021-06-15T12:00:00.000Z",
-  "updatedAt": "2021-06-15T12:00:00.000Z"
+  "updatedAt": "2021-06-15T12:00:00.000Z",
+  "portadaLocal": "portadas/is-bolet_n_salesiano_281_real1_imp.jpg"
  },
  {
   "id": "is-boleti_n_salesiano_280",
@@ -348,7 +374,8 @@
   "resumen": "Edición del Boletín Salesiano Colombia, disponible para leer en Issuu.",
   "fuente": "Issuu",
   "createdAt": "2021-04-19T12:00:00.000Z",
-  "updatedAt": "2021-04-19T12:00:00.000Z"
+  "updatedAt": "2021-04-19T12:00:00.000Z",
+  "portadaLocal": "portadas/is-boleti_n_salesiano_280.jpg"
  },
  {
   "id": "is-boleti_n_salesiano_279",
@@ -361,7 +388,8 @@
   "resumen": "Edición del Boletín Salesiano Colombia, disponible para leer en Issuu.",
   "fuente": "Issuu",
   "createdAt": "2020-11-20T12:00:00.000Z",
-  "updatedAt": "2020-11-20T12:00:00.000Z"
+  "updatedAt": "2020-11-20T12:00:00.000Z",
+  "portadaLocal": "portadas/is-boleti_n_salesiano_279.jpg"
  },
  {
   "id": "is-boletin_salesiano_278",
@@ -374,7 +402,8 @@
   "resumen": "Edición del Boletín Salesiano Colombia, disponible para leer en Issuu.",
   "fuente": "Issuu",
   "createdAt": "2020-08-05T12:00:00.000Z",
-  "updatedAt": "2020-08-05T12:00:00.000Z"
+  "updatedAt": "2020-08-05T12:00:00.000Z",
+  "portadaLocal": "portadas/is-boletin_salesiano_278.jpg"
  },
  {
   "id": "is-bs_colombia_277",
@@ -387,7 +416,8 @@
   "resumen": "Edición del Boletín Salesiano Colombia, disponible para leer en Issuu.",
   "fuente": "Issuu",
   "createdAt": "2020-05-29T12:00:00.000Z",
-  "updatedAt": "2020-05-29T12:00:00.000Z"
+  "updatedAt": "2020-05-29T12:00:00.000Z",
+  "portadaLocal": "portadas/is-bs_colombia_277.jpg"
  },
  {
   "id": "is-boletin_salesiano_276",
@@ -400,7 +430,8 @@
   "resumen": "Edición del Boletín Salesiano Colombia, disponible para leer en Issuu.",
   "fuente": "Issuu",
   "createdAt": "2020-03-18T12:00:00.000Z",
-  "updatedAt": "2020-03-18T12:00:00.000Z"
+  "updatedAt": "2020-03-18T12:00:00.000Z",
+  "portadaLocal": "portadas/is-boletin_salesiano_276.jpg"
  },
  {
   "id": "is-boletin_salesiano_completo_corregido_curvas",
@@ -413,7 +444,8 @@
   "resumen": "Edición del Boletín Salesiano Colombia, disponible para leer en Issuu.",
   "fuente": "Issuu",
   "createdAt": "2019-12-17T12:00:00.000Z",
-  "updatedAt": "2019-12-17T12:00:00.000Z"
+  "updatedAt": "2019-12-17T12:00:00.000Z",
+  "portadaLocal": "portadas/is-boletin_salesiano_completo_corregido_curvas.jpg"
  },
  {
   "id": "is-bolet_n_salesiano_junio_2019",
@@ -426,7 +458,8 @@
   "resumen": "Edición del Boletín Salesiano Colombia, disponible para leer en Issuu.",
   "fuente": "Issuu",
   "createdAt": "2019-07-17T12:00:00.000Z",
-  "updatedAt": "2019-07-17T12:00:00.000Z"
+  "updatedAt": "2019-07-17T12:00:00.000Z",
+  "portadaLocal": "portadas/is-bolet_n_salesiano_junio_2019.jpg"
  },
  {
   "id": "is-boletin_salesiano_marzo_2019",
@@ -439,7 +472,8 @@
   "resumen": "Edición del Boletín Salesiano Colombia, disponible para leer en Issuu.",
   "fuente": "Issuu",
   "createdAt": "2019-04-15T12:00:00.000Z",
-  "updatedAt": "2019-04-15T12:00:00.000Z"
+  "updatedAt": "2019-04-15T12:00:00.000Z",
+  "portadaLocal": "portadas/is-boletin_salesiano_marzo_2019.jpg"
  },
  {
   "id": "is-boletin_salesiano_272_-_web",
@@ -452,7 +486,8 @@
   "resumen": "Edición del Boletín Salesiano Colombia, disponible para leer en Issuu.",
   "fuente": "Issuu",
   "createdAt": "2018-12-20T12:00:00.000Z",
-  "updatedAt": "2018-12-20T12:00:00.000Z"
+  "updatedAt": "2018-12-20T12:00:00.000Z",
+  "portadaLocal": "portadas/is-boletin_salesiano_272_-_web.jpg"
  },
  {
   "id": "is-bolet_n_salesiano_abril_de_2018",
@@ -465,7 +500,8 @@
   "resumen": "Edición del Boletín Salesiano Colombia, disponible para leer en Issuu.",
   "fuente": "Issuu",
   "createdAt": "2018-05-31T12:00:00.000Z",
-  "updatedAt": "2018-05-31T12:00:00.000Z"
+  "updatedAt": "2018-05-31T12:00:00.000Z",
+  "portadaLocal": "portadas/is-bolet_n_salesiano_abril_de_2018.jpg"
  },
  {
   "id": "is-bolet__n_salesiano_diciembre_2017",
@@ -478,7 +514,8 @@
   "resumen": "Edición del Boletín Salesiano Colombia, disponible para leer en Issuu.",
   "fuente": "Issuu",
   "createdAt": "2018-01-03T12:00:00.000Z",
-  "updatedAt": "2018-01-03T12:00:00.000Z"
+  "updatedAt": "2018-01-03T12:00:00.000Z",
+  "portadaLocal": "portadas/is-bolet__n_salesiano_diciembre_2017.jpg"
  },
  {
   "id": "is-boletin_20salesiano_20colombia_20se",
@@ -491,7 +528,8 @@
   "resumen": "Edición del Boletín Salesiano Colombia, disponible para leer en Issuu.",
   "fuente": "Issuu",
   "createdAt": "2017-11-15T12:00:00.000Z",
-  "updatedAt": "2017-11-15T12:00:00.000Z"
+  "updatedAt": "2017-11-15T12:00:00.000Z",
+  "portadaLocal": "portadas/is-boletin_20salesiano_20colombia_20se.jpg"
  },
  {
   "id": "is-bolet__n_salesiano_-_julio_2017",
@@ -504,7 +542,8 @@
   "resumen": "Edición del Boletín Salesiano Colombia, disponible para leer en Issuu.",
   "fuente": "Issuu",
   "createdAt": "2017-08-04T12:00:00.000Z",
-  "updatedAt": "2017-08-04T12:00:00.000Z"
+  "updatedAt": "2017-08-04T12:00:00.000Z",
+  "portadaLocal": "portadas/is-bolet__n_salesiano_-_julio_2017.jpg"
  },
  {
   "id": "is-bolet__n_salesiano_febrero_2017",
@@ -517,6 +556,7 @@
   "resumen": "Edición del Boletín Salesiano Colombia, disponible para leer en Issuu.",
   "fuente": "Issuu",
   "createdAt": "2017-02-01T12:00:00.000Z",
-  "updatedAt": "2017-02-01T12:00:00.000Z"
+  "updatedAt": "2017-02-01T12:00:00.000Z",
+  "portadaLocal": "portadas/is-bolet__n_salesiano_febrero_2017.jpg"
  }
 ]
