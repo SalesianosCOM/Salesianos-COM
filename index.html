@@ -104,6 +104,7 @@ button,input,select,textarea{font:inherit;color:inherit}
 select.input,.input{box-sizing:border-box;padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:var(--surface);max-width:100%}
 .seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--surface)}
 .seg button{all:unset;cursor:pointer;padding:7px 12px;font-size:.85rem;font-weight:600;color:var(--muted)}
+.seg button svg{width:15px;height:15px;vertical-align:-3px;margin-right:4px}
 .seg button[aria-pressed="true"]{background:var(--accent-soft);color:var(--accent)}
 .seg button:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
 .chip{display:inline-flex;align-items:center;font-size:.72rem;font-weight:600;padding:2px 8px;border-radius:99px;background:var(--sunk);color:var(--muted);white-space:nowrap}
@@ -154,6 +155,29 @@ select.input,.input{box-sizing:border-box;padding:8px 10px;border:1px solid var(
 .cal-panel{display:flex;gap:14px;align-items:center;flex-wrap:wrap;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:14px 16px}
 .cal-panel .grow{flex:1 1 260px;min-width:0;display:flex;flex-direction:column;gap:2px}
 .incl-insp{display:inline-flex;align-items:center;gap:6px;font-size:.85rem;color:var(--ink);cursor:pointer;white-space:nowrap}.incl-insp input{width:16px;height:16px;accent-color:var(--red,#E30613)}
+.mcal{padding:14px}
+.mcal-head{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+.mcal-head h2{margin:0 4px;text-transform:capitalize;min-width:9ch;text-align:center}
+.mcal-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px}
+.mcal-dow{font-size:.72rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;text-align:center;padding:4px 0}
+.mcal-cell{all:unset;box-sizing:border-box;cursor:pointer;min-height:96px;border:1px solid var(--line);border-radius:8px;background:var(--surface);padding:5px;display:flex;flex-direction:column;gap:3px;overflow:hidden;min-width:0}
+.mcal-cell.empty,.mcal-cell.empty:hover{background:transparent;border-color:transparent;cursor:default}
+.mcal-cell.we{background:var(--sunk)}
+.mcal-cell:hover{border-color:var(--taupe)}
+.mcal-cell:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+.mcal-cell.sel{border:2px solid var(--accent);padding:4px}
+.mcal-n{font-size:.8rem;font-weight:700;color:var(--ink);align-self:flex-start;min-width:22px;height:22px;display:grid;place-items:center;border-radius:11px}
+.mcal-cell.today .mcal-n{background:var(--accent);color:var(--on-accent)}
+.mcal-ev{display:block;font-size:.7rem;line-height:1.25;padding:2px 5px;border-radius:4px;background:#FFF1D6;color:#7A4A00;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mcal-ev.insp{background:var(--accent-soft);color:var(--accent)}
+.mcal-ev.cancel{text-decoration:line-through;opacity:.6}
+.mcal-more{font-size:.68rem;color:var(--muted);font-weight:600;padding-left:3px}
+.mcal-dots{display:none;gap:3px;flex-wrap:wrap;margin-top:auto}
+.mcal-dots i,.mcal-legend i{width:7px;height:7px;border-radius:50%;background:#FFA415;display:inline-block}
+.mcal-dots i.insp,.mcal-legend i.insp{background:var(--accent)}
+.mcal-legend{display:flex;gap:16px;flex-wrap:wrap;font-size:.78rem;color:var(--muted);margin-top:10px}
+.mcal-legend span{display:inline-flex;align-items:center;gap:6px}
+@media (max-width:700px){.mcal{padding:10px}.mcal-cell{min-height:54px;padding:4px;align-items:center}.mcal-cell.sel{padding:3px}.mcal-ev,.mcal-more{display:none}.mcal-dots{display:flex;justify-content:center}.mcal-n{align-self:center}.mcal-grid{gap:3px}}
 .cal-url{font-size:.78rem;color:var(--muted);overflow-wrap:anywhere;user-select:all}
 .datebox.past .m{background:var(--muted)}
 .month-head{font-family:var(--f-display);font-size:1.2rem;font-weight:400;font-synthesis:none;color:var(--accent);text-transform:capitalize;padding-top:6px;display:flex;gap:10px;align-items:baseline}
@@ -510,6 +534,7 @@ const SCHEMAS = {
 };
 
 const ICON = {
+  list:'<path d="M8 6h13M8 12h13M8 18h13M3.5 6h.01M3.5 12h.01M3.5 18h.01"/>',
   home:'<path d="M3 11 12 4l9 7"/><path d="M5 10v10h14V10"/>',
   cal:'<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/>',
   cake:'<path d="M4 21V12h16v9M2 21h20M7 12V9m5 3V9m5 3V9"/><path d="M7 6.5c0-1 1-2 0-3m5 3c0-1 1-2 0-3m5 3c0-1 1-2 0-3"/>',
@@ -543,7 +568,7 @@ const VIEW_TITLES = {inicio:"Inicio",cronograma:"Cronograma",cumpleanos:"Cumplea
 const S = {
   db:null,user:null,assets:null,downloads:null,uid:null,me:null,role:"member",member:null,
   data:{actividades:[],salesianos:[],colaboradores:[],obras:[],boletines:[],evangelio:[],members:[],bloqueados:[],subs:[],correos:[],consejo:[],familia:[],formandos:[],necrologio:[],sgi:[],config:[]},
-  loaded:{}, view:"inicio", q:{}, f:{obraF:ls("obraF",""),inclInsp:ls("inclInsp","")==="1",areaF:(v=>({"Pastoral Juvenil":"Pastoral Juvenil y MJS"})[v]||v)(ls("areaF","")),cron:"proximas",cat:"",insp:"",tipo:"",adminTab:"miembros"},
+  loaded:{}, view:"inicio", q:{}, f:{cronVista:ls("cronVista","lista"),mes:"",dia:"",obraF:ls("obraF",""),inclInsp:ls("inclInsp","")==="1",areaF:(v=>({"Pastoral Juvenil":"Pastoral Juvenil y MJS"})[v]||v)(ls("areaF","")),cron:"proximas",cat:"",insp:"",tipo:"",adminTab:"miembros"},
   profiles:{}, telKey:null, telCache:new Map(), alertsOpen:false, prevVisit:null, writeChain:Promise.resolve()
 };
 
@@ -941,17 +966,20 @@ function obraChips(a){
 
 VIEWS.cronograma = function(){
   const t=today(), subs=mySubs(), f=S.f, q=norm(S.q.cronograma);
-  let items=S.data.actividades.slice();
+  let base=S.data.actividades.slice();
+  if(f.cat) base=base.filter(a=>a.categoria===f.cat);
+  if(S.f.obraF) base=base.filter(a=>actForObra(a,S.f.obraF));
+  if(S.f.areaF) base=base.filter(a=>actForArea(a,S.f.areaF));
+  if(q) base=base.filter(a=>norm([a.titulo,a.lugar,a.responsable,a.descripcion].join(" ")).includes(q));
+  const vista=f.cronVista||"lista";
+  let items=base;
   if(f.cron==="proximas") items=items.filter(a=>(a.fechaFin||a.fecha)>=t);
   else if(f.cron==="mias") items=items.filter(a=>subs[a.id]&&(a.fechaFin||a.fecha)>=t);
   else { items=items.filter(a=>(a.fechaFin||a.fecha)<t).reverse(); }
-  if(f.cat) items=items.filter(a=>a.categoria===f.cat);
-  if(S.f.obraF) items=items.filter(a=>actForObra(a,S.f.obraF));
-  if(S.f.areaF) items=items.filter(a=>actForArea(a,S.f.areaF));
-  if(q) items=items.filter(a=>norm([a.titulo,a.lugar,a.responsable,a.descripcion].join(" ")).includes(q));
   const nMine=S.data.actividades.filter(a=>subs[a.id]&&(a.fechaFin||a.fecha)>=t&&!a.cancelada).length;
   let html=`<div class="toolbar">
-    <div class="seg" role="group" aria-label="Mostrar">${(PUBLIC_MODE?[["proximas","Próximas"],["pasadas","Pasadas"]]:[["proximas","Próximas"],["mias",`Mis suscripciones (${nMine})`],["pasadas","Pasadas"]]).map(([k,l])=>`<button data-act="cron" data-v="${k}" aria-pressed="${f.cron===k}">${l}</button>`).join("")}</div>
+    <div class="seg" role="group" aria-label="Vista"><button data-act="cronVista" data-v="lista" aria-pressed="${vista==="lista"}">${svg("list")} Lista</button><button data-act="cronVista" data-v="mes" aria-pressed="${vista==="mes"}">${svg("cal")} Mes completo</button></div>
+    <div class="seg" role="group" aria-label="Mostrar" ${vista==="mes"?"hidden":""}>${(PUBLIC_MODE?[["proximas","Próximas"],["pasadas","Pasadas"]]:[["proximas","Próximas"],["mias",`Mis suscripciones (${nMine})`],["pasadas","Pasadas"]]).map(([k,l])=>`<button data-act="cron" data-v="${k}" aria-pressed="${f.cron===k}">${l}</button>`).join("")}</div>
     ${obraSelect("f_obraCron")}${areaSelect("f_areaCron")}
     <select class="input" id="f_cat" data-filter="cat" aria-label="Categoría"><option value="">Todas las categorías</option>${CATEGORIAS.map(c=>`<option ${f.cat===c?"selected":""}>${c}</option>`).join("")}</select>
     <div class="grow"><input class="search" id="s_cronograma" data-search="cronograma" placeholder="Buscar actividad, lugar o responsable" value="${esc(S.q.cronograma||"")}" aria-label="Buscar"></div>
@@ -962,6 +990,7 @@ VIEWS.cronograma = function(){
   <section class="cal-panel"><div class="grow"><b>Calendario inspectorial en Outlook</b><span class="hint">Suscríbete una vez y tu celular u Outlook recibirá automáticamente todas las actividades, con sus cambios.</span>${(()=>{ const c=S.data.config.find(x=>x.id==="sync_outlook"); if(!c||!c.ultima) return ""; const d=new Date(c.ultima); return `<span class="hint">✓ Cronograma de la app sincronizado con Outlook el ${esc(d.toLocaleDateString("es-CO",{day:"numeric",month:"long"}))} a las ${esc(d.toLocaleTimeString("es-CO",{hour:"numeric",minute:"2-digit"}))}. Se actualiza solo cada día.</span>`; })()}</div>
     <div class="toolbar"><a class="btn small primary" href="${CAL_HTML}" target="_blank" rel="noopener">Ver calendario</a><button class="btn small" data-act="copy" data-v="${CAL_ICS}">Copiar enlace de suscripción</button><button class="btn small" data-act="calHelp">Cómo suscribirme</button></div></section>`;
   if(!S.loaded.actividades) return html+skel();
+  if(vista==="mes") return html+monthView(base);
   if(!items.length) return html+emptyBox(f.cron==="mias"?"No tienes suscripciones próximas":"No hay actividades para mostrar", f.cron==="mias"?"Abre «Próximas» y pulsa «Suscribirme» en las que te interesen.":(isAdmin()?"Usa «Nueva actividad» para publicar la primera.":"El equipo de administración publicará aquí el cronograma."));
   let cur="";
   html+=`<div class="list">`;
@@ -987,6 +1016,28 @@ VIEWS.cronograma = function(){
   }
   return html+`</div>`;
 };
+function monthView(list){
+  const t=today(); const m=S.f.mes||t.slice(0,7); const [Y,M]=m.split("-").map(Number);
+  const m0=new Date(Y,M-1,1), nd=new Date(Y,M,0).getDate(), m1=new Date(Y,M-1,nd);
+  const byDay={};
+  for(const a of list){ const s=parse(a.fecha); if(!s) continue; const e=parse(a.fechaFin)||s; if(e<m0||s>m1) continue;
+    for(let d=new Date(Math.max(s,m0)); d<=e&&d<=m1; d.setDate(d.getDate()+1)){ const k=ymd(d); (byDay[k]=byDay[k]||[]).push(a); } }
+  const sel=S.f.dia&&S.f.dia.slice(0,7)===m?S.f.dia:(t.slice(0,7)===m?t:"");
+  const off=(m0.getDay()+6)%7; let cells="";
+  for(let i=0;i<off;i++) cells+=`<div class="mcal-cell empty" aria-hidden="true"></div>`;
+  for(let d=1; d<=nd; d++){ const k=`${Y}-${pad(M)}-${pad(d)}`, ev=byDay[k]||[], wd=(off+d-1)%7;
+    cells+=`<button class="mcal-cell${k===t?" today":""}${k===sel?" sel":""}${wd>=5?" we":""}" data-act="dia" data-v="${k}" aria-label="${esc(fmtLong(k,true))}: ${ev.length} ${ev.length===1?"actividad":"actividades"}"><span class="mcal-n">${d}</span>
+      ${ev.slice(0,3).map(a=>`<span class="mcal-ev${a.cancelada?" cancel":""}${obrasDe(a).length?"":" insp"}">${esc(a.titulo)}</span>`).join("")}${ev.length>3?`<span class="mcal-more">+${ev.length-3} más</span>`:""}
+      ${ev.length?`<span class="mcal-dots">${ev.slice(0,4).map(a=>`<i class="${obrasDe(a).length?"":"insp"}"></i>`).join("")}</span>`:""}</button>`; }
+  const tot=new Set(Object.values(byDay).flat().map(a=>a.id)).size;
+  let out=`<section class="mcal panel"><div class="mcal-head"><button class="btn small" data-act="mes" data-v="-1" aria-label="Mes anterior">‹</button><h2>${MESES[M-1]} ${Y}</h2><button class="btn small" data-act="mes" data-v="1" aria-label="Mes siguiente">›</button><button class="btn small" data-act="mes" data-v="0">Hoy</button><span class="hint grow" style="text-align:right">${tot} ${tot===1?"actividad":"actividades"} este mes</span></div>
+    <div class="mcal-grid">${["Lun","Mar","Mié","Jue","Vie","Sáb","Dom"].map(x=>`<div class="mcal-dow">${x}</div>`).join("")}${cells}</div>
+    <div class="mcal-legend"><span><i></i> De una obra</span><span><i class="insp"></i> De toda la inspectoría</span></div></section>`;
+  if(sel){ const ev=byDay[sel]||[];
+    out+=`<div class="month-head" style="text-transform:none">${esc((s=>s.charAt(0).toUpperCase()+s.slice(1))(fmtLong(sel,true)))}</div>`+(ev.length?`<div class="list">${ev.map(a=>`<article class="act ${a.cancelada?"cancel":""}">${dateBox(a.fecha,false,false,a.fechaFin)}<div class="act-body"><div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">${a.categoria?`<span class="chip blue">${esc(a.categoria)}</span>`:""}${obraChips(a)}${areaChips(a)}${a.cancelada?'<span class="chip red">Cancelada</span>':""}</div><h3>${esc(a.titulo)}</h3><div class="act-date">${esc(fmtLong(a.fecha,true))}${a.fechaFin&&a.fechaFin!==a.fecha?" – "+esc(fmtLong(a.fechaFin,true)):""}</div><div class="act-meta">${a.hora?`<span class="mono">${esc(a.hora)}${a.horaFin?"–"+esc(a.horaFin):""}</span>`:""}${a.lugar?`<span>${esc(a.lugar)}</span>`:""}${a.responsable?`<span>Responsable: ${esc(a.responsable)}</span>`:""}</div>${a.descripcion?`<p class="act-desc">${esc(a.descripcion)}</p>`:""}${a.enlace?`<div class="act-actions"><a class="btn small" href="${esc(safeUrl(a.enlace))}" target="_blank" rel="noopener">Abrir enlace</a></div>`:""}</div></article>`).join("")}</div>`:`<p class="muted">No hay actividades este día.</p>`);
+  } else out+=`<p class="muted" style="margin-top:12px">Toca un día para ver sus actividades.</p>`;
+  return out;
+}
 function safeUrl(u){ u=String(u||"").trim(); if(!u) return ""; if(!/^https?:\/\//i.test(u)) u="https://"+u; return u; }
 
 /* directories */
@@ -1444,6 +1495,9 @@ document.addEventListener("click", async e=>{
   else if(a==="closeAlerts"){ S.alertsOpen=false; markAllSeen(); $("#overlay").innerHTML=""; render(); }
   else if(a==="seenAll"){ markAllSeen(); render(); }
   else if(a==="cron"){ S.f.cron=t.dataset.v; render(); }
+  else if(a==="cronVista"){ S.f.cronVista=t.dataset.v; lsSet("cronVista",t.dataset.v); render(); }
+  else if(a==="mes"){ const v=+t.dataset.v; if(!v){ S.f.mes=today().slice(0,7); S.f.dia=""; } else { const [y,m]=(S.f.mes||today().slice(0,7)).split("-").map(Number); const d=new Date(y,m-1+v,1); S.f.mes=`${d.getFullYear()}-${pad(d.getMonth()+1)}`; S.f.dia=""; } render(); }
+  else if(a==="dia"){ S.f.dia=t.dataset.v; render(); const h=document.querySelector(".mcal + .month-head"); h&&h.scrollIntoView({behavior:"smooth",block:"start"}); }
   else if(a==="atab"){ S.f.adminTab=t.dataset.v; render(); }
   else if(a==="cg"){ S.f.cg=t.dataset.v; render(); }
   else if(a==="salTab"){ S.f.salTab=t.dataset.v; render(); }
