@@ -703,7 +703,7 @@ function unlockDialog(after){
     try{ const key=await telKeyFrom(code);
       if(PUBLIC_MODE && S.priv && !S.privOpen){
         let bundle; try{ bundle=JSON.parse(await telDec(S.priv,key)); }catch(e){ er.textContent="El código no es correcto."; er.hidden=false; $("#tl_go").disabled=false; $("#tl_go").textContent="Ver teléfonos"; return; }
-        Object.entries(bundle).forEach(([k,v])=>{ S.data[k]=v; }); S.privOpen=true; S.reshell=true;
+        Object.entries(bundle).forEach(([k,v])=>{ S.data[k]=unify(k,v); }); S.privOpen=true; S.reshell=true;
       } else {
       const sample=[...S.data.salesianos,...S.data.formandos].find(r=>r.telCif);
       if(sample){ try{ await telDec(sample.telCif,key); }catch(e){ er.textContent="El código no es correcto."; er.hidden=false; $("#tl_go").disabled=false; $("#tl_go").textContent="Ver teléfonos"; return; } }
@@ -761,7 +761,7 @@ async function publicBoot(){
   let d;
   try{ const r=await fetch("data.json?v="+Date.now(),{cache:"no-store"}); if(!r.ok) throw 0; d=await r.json(); }
   catch(e){ return gate("No se pudo cargar la información","Revisa tu conexión y vuelve a abrir el enlace en unos minutos."); }
-  Object.entries(d.pub||{}).forEach(([k,v])=>{ S.data[k]=v; });
+  Object.entries(d.pub||{}).forEach(([k,v])=>{ S.data[k]=unify(k,v); });
   S.files=d.files||{}; S.priv=d.priv||""; S.generado=d.generado||""; S.privOpen=false;
   Object.keys(S.data).forEach(k=>S.loaded[k]=true);
   const h=(location.hash||"").slice(1); if(VIEW_TITLES[h] && h!=="admin") S.view=h;
@@ -804,7 +804,7 @@ function registration(email){
 /* ---------- data ---------- */
 function listen(key, query){
   query.onSnapshot(snap=>{
-    S.data[key]=snap.docs.map(d=>({id:d.id,...d.data()}));
+    S.data[key]=unify(key, snap.docs.map(d=>({id:d.id,...d.data()})));
     S.loaded[key]=true; schedule();
   }, e=>{ S.loaded[key]=true; schedule(); });
 }
@@ -1019,11 +1019,44 @@ const OBRA_RULES = [
   [/\b(llano ?grande|rionegro|prenoviciado|csf)\b/,["o044"]],
   [/\b(tulua)\b/,["o045","o046","o052"]]
 ];
+
+/* lenguaje unificado: siglas de obras y sectores → nombre completo */
+const SIGLAS_OBRAS = {CCDB:"Centro de Capacitación Don Bosco",CEDBOS:"Centro Educacional Don Bosco",CDB:"Ciudad Don Bosco",PJB:"Pedro Justo Berrío",CSDB:"Centro Social Don Bosco",CSDS:"Colegio Santo Domingo Savio",CDS:"Colegio Santo Domingo Savio",SDS:"Santo Domingo Savio",CSPC:"Colegio Salesiano San Pedro Claver",CSSPC:"Colegio Salesiano San Pedro Claver",CSP:"Colegio Salesiano San Pedro Claver",SPC:"Colegio Salesiano San Pedro Claver",EPS:"Escuelas Profesionales Salesianas",CSF:"Centro Salesiano de Formación",IEDB:"Institución Educativa Don Bosco",PSFS:"Parroquia San Francisco de Sales",PSJB:"Parroquia San Juan Bosco",PSR:"Parroquia San Roque",CSSJB:"Colegio San Juan Bosco",CSJB:"Colegio San Juan Bosco",SJB:"San Juan Bosco",DBT:"Don Bosco Tech"};
+const SIGLAS_AREAS = {GH:"Gestión Humana",SST:"Seguridad y Salud en el Trabajo",PJS:"Pastoral Juvenil Salesiana",MJS:"Movimiento Juvenil Salesiano",ERE:"Educación Religiosa Escolar",FLIA:"Familia",SDB:"Salesianos de Don Bosco",FMA:"Hijas de María Auxiliadora",UPS:"Universidad Pontificia Salesiana",ETDH:"Educación para el Trabajo y el Desarrollo Humano",CIE:"Comisión Inspectorial de Educación"};
+const SIGLAS_ALL = {...SIGLAS_OBRAS,...SIGLAS_AREAS};
+const SIGLAS_PRE = [[/Berr[ìi]o`?/g,"Berrío"],[/\bSSt\b/g,"SST"],[/\bTul[uú]a\b/g,"Tuluá"],[/\bPopayan\b/g,"Popayán"],[/\bcartagena\b/g,"Cartagena"],[/\bPARROQUIA\b/g,"Parroquia"],[/\bSUFRAGIO\b/g,"El Sufragio"],[/ Y (AMBIENTAL|Ambiental)\b/g," y Ambiental"],[/\bA ITI\b/g,"a ITI"],[/\bVisista\b/g,"Visita"],[/\bIE(?= Don Bosco)/g,"Institución Educativa"],[/\bDB\b/g,"Don Bosco"],[/\bEJE\b/g,"Eje Cafetero"],[/\bCALI\b/g,"Cali"],[/(Centro Educacional Don Bosco)\s*[–-]\s*CEDBOS\b/g,"$1"],[/Medellín (CDB|PJB)\b/g,"Medellín ($1)"]];
+const SIGLAS_POST = [[/\b(?:Instituto Salesiano|ITI Salesiano|Colegio) Pedro Justo Berrío/g,"Instituto Pedro Justo Berrío"],[/(?<!Instituto |Comunidad |\()Pedro Justo Berrío/g,"Instituto Pedro Justo Berrío"],[/(?<!Santo )\bDomingo Savio\b/g,"Santo Domingo Savio"],[/\bEscuelas\b(?! Profesionales)/g,"Escuelas Profesionales Salesianas"],[/\bITI\b(?! San Juan Bosco| Salesiano)/g,"ITI San Juan Bosco"]];
+function expandSiglas(s, dict){
+  if(!s||typeof s!=="string") return s;
+  for(const [re,r] of SIGLAS_PRE) s=s.replace(re,r);
+  s=s.replace(/\b[A-Z]{2,7}\b/g, w=>dict[w]||w);
+  for(const [re,r] of SIGLAS_POST) s=s.replace(re,r);
+  return s;
+}
+const UNIFY = {actividades:[["titulo","lugar","descripcion"],SIGLAS_ALL], obras:[["nombre","comunidadSdb"],SIGLAS_OBRAS], salesianos:[["obra","comunidad","cargo"],SIGLAS_OBRAS], colaboradores:[["obra","cargo"],SIGLAS_OBRAS], formandos:[["obra","comunidad"],SIGLAS_OBRAS]};
+function unify(key, arr){
+  const u=UNIFY[key]; if(!u||!Array.isArray(arr)) return arr;
+  const [fields,dict]=u;
+  for(const r of arr){ if(!r||r._orig!==undefined) continue; const orig=[];
+    for(const f of fields){ const v=r[f]; if(typeof v==="string"&&v){ const e=expandSiglas(v,dict); if(e!==v){ orig.push(v); r[f]=e; } } }
+    Object.defineProperty(r,"_orig",{value:orig.join(" "),enumerable:false,writable:true});
+    if(key==="actividades") Object.defineProperty(r,"tituloOrig",{value:orig.length?(orig[0]):r.titulo,enumerable:false,writable:true});
+  }
+  return arr;
+}
+/* búsqueda exacta con sigla o nombre completo */
+function qMatch(text, raw){
+  const W=x=>" "+norm(x).replace(/[^a-z0-9ñ@.]+/g," ").trim();
+  const h=W(text)+" ", q=W(raw); if(q===" ") return true;
+  if(h.includes(q)) return true;
+  const qx=W(String(raw).replace(/\b[A-Za-z]{2,7}\b/g, w=>SIGLAS_ALL[w.toUpperCase()]||w));
+  return qx!==q && h.includes(qx);
+}
 const _obrasCache = new Map();
 function obrasDe(a){
   if(a.obra) return a.obra==="inspectorial"?[]:[a.obra];
   const key=a.id+"|"+a.titulo; if(_obrasCache.has(key)) return _obrasCache.get(key);
-  const t=norm(a.titulo); const set=new Set();
+  const t=norm((a.tituloOrig&&a.tituloOrig!==a.titulo?a.tituloOrig+" ":"")+a.titulo); const set=new Set();
   for(const [re,ids] of OBRA_RULES){ if(re.test(t)) ids.forEach(i=>set.add(i)); }
   const r=[...set]; _obrasCache.set(key,r); return r;
 }
@@ -1031,7 +1064,7 @@ const _areasCache = new Map();
 function areasDe(a){
   if(a.area) return [AREA_ALIAS[a.area]||a.area];
   const key=a.id+"|"+a.titulo; if(_areasCache.has(key)) return _areasCache.get(key);
-  const t=norm(a.titulo); const r=AREAS.filter(([n,re])=>re.test(t)).map(x=>x[0]);
+  const t=norm((a.tituloOrig&&a.tituloOrig!==a.titulo?a.tituloOrig+" ":"")+a.titulo); const r=AREAS.filter(([n,re])=>re.test(t)).map(x=>x[0]);
   /* el nombre de una casa de formación solo indica Formación cuando ningún otro sector organiza la actividad */
   if(!r.length && /\b(noviciado|posnoviciado|prenoviciado|teologado|llano ?grande|aspirantado)\b/.test(t)) r.push("Formación (Vicaría)");
   /* los sectores de servicio (SST, Gestión Humana, Economato, Calidad) no se mezclan con Formación ni Gobierno por el lugar visitado */
@@ -1066,7 +1099,7 @@ VIEWS.cronograma = function(){
   if(f.cat) base=base.filter(a=>a.categoria===f.cat);
   if(S.f.obraF) base=base.filter(a=>actForObra(a,S.f.obraF));
   if(S.f.areaF) base=base.filter(a=>actForArea(a,S.f.areaF));
-  if(q) base=base.filter(a=>norm([a.titulo,a.lugar,a.responsable,a.descripcion].join(" ")).includes(q));
+  if(q) base=base.filter(a=>qMatch([a.titulo,a.lugar,a.responsable,a.descripcion,a._orig].join(" "),S.q.cronograma));
   const vista=f.cronVista||"lista";
   let items=base;
   if(f.cron==="proximas") items=items.filter(a=>(a.fechaFin||a.fecha)>=t);
@@ -1198,7 +1231,7 @@ const GS_COLS=[["salesianos","Salesianos","salesianos",p=>[p.cargo,p.comunidad,p
 function globalSearchBox(){ return `<section class="gsearch" role="search"><label class="gs-label" for="s_global">Buscar en Salesianos COM</label><div class="gs-wrap"><input class="search gs-input" id="s_global" data-search="global" placeholder="Nombre, obra, comunidad, actividad, ciudad, correo…" value="${esc(S.q.global||"")}" autocomplete="off"></div></section>`; }
 function globalResults(q){
   const nq=norm(q); let total=0;
-  const groups=GS_COLS.map(([col,label,view,sub])=>{ const arr=(S.data[col]||[]).filter(p=>norm([p.nombre,p.titulo,p.cargo,p.comunidad,p.obra,p.ciudad,p.correo,p.lugar,p.grupo,p.direccion,p.departamento,p.responsable].filter(Boolean).join(" ")).includes(nq)); total+=arr.length; return {col,label,view,sub,arr}; }).filter(g=>g.arr.length);
+  const groups=GS_COLS.map(([col,label,view,sub])=>{ const arr=(S.data[col]||[]).filter(p=>qMatch([p.nombre,p.titulo,p.cargo,p.comunidad,p.obra,p.ciudad,p.correo,p.lugar,p.grupo,p.direccion,p.departamento,p.responsable,p._orig].filter(Boolean).join(" "),q)); total+=arr.length; return {col,label,view,sub,arr}; }).filter(g=>g.arr.length);
   if(!groups.length) return emptyBox("No encontramos resultados","Prueba con otra palabra: un apellido, una ciudad o el nombre de una obra.");
   return `<p class="count">${total} ${total===1?"resultado":"resultados"} para «${esc(q)}»</p><div class="gs-groups">${groups.map(g=>`<section class="panel gs-group"><div class="panel-head"><h2>${esc(g.label)}</h2><span class="count">${g.arr.length}</span></div><div class="mini-list">${g.arr.slice(0,6).map(p=>`<button class="gs-item" data-act="gsOpen" data-col="${g.col}" data-view="${g.view}" data-q="${esc(p.nombre||p.titulo||"")}" data-fecha="${esc(p.fecha||"")}"><span class="t">${esc(p.nombre||p.titulo||"")}</span><span class="s">${esc(g.sub(p))}</span></button>`).join("")}</div>${g.arr.length>6?`<button class="link-btn" data-act="gsOpen" data-col="${g.col}" data-view="${g.view}" data-q="${esc(q)}">Ver los ${g.arr.length} resultados en ${esc(g.label)}</button>`:""}</section>`).join("")}</div>`;
 }
@@ -1232,7 +1265,7 @@ function dirToolbar(col,extra){
   return `<div class="toolbar"><div class="grow"><input class="search" id="s_${col}" data-search="${col}" placeholder="Buscar por nombre, obra, ciudad, teléfono…" value="${esc(S.q[col]||"")}" aria-label="Buscar"></div>${extra||""}</div>
   ${isAdmin()?`<div class="toolbar"><button class="btn primary" data-act="new" data-col="${col}">Agregar ${sc.single}</button><button class="btn" data-act="import" data-col="${col}">Importar desde Excel (CSV)</button><button class="btn" data-act="template" data-col="${col}">Descargar plantilla</button><button class="btn" data-act="export" data-col="${col}">Exportar</button></div>`:""}`;
 }
-function filterQ(col,arr){ const q=norm(S.q[col]); if(!q) return arr; return arr.filter(p=>norm(Object.values(p).join(" ")).includes(q)); }
+function filterQ(col,arr){ const q=norm(S.q[col]); if(!q) return arr; return arr.filter(p=>qMatch(Object.values(p).filter(v=>typeof v!=="object").join(" ")+" "+(p._orig||""),S.q[col])); }
 const inspSelect = ()=>`<select class="input" id="f_insp" data-filter="insp" aria-label="Inspectoría"><option value="">Todas las inspectorías</option>${INSPECTORIAS.map(i=>`<option ${S.f.insp===i?"selected":""}>${i}</option>`).join("")}</select>`;
 
 const isFormando = p=>/^(Salesiano en formación|Diácono)/.test(p.condicion||"");
@@ -1423,7 +1456,7 @@ VIEWS.cumpleanos = function(){
   const q=norm(S.q.cumpleanos||"");
   const search=`<div class="toolbar"><div class="grow"><input class="search" id="s_cumpleanos" data-search="cumpleanos" placeholder="Buscar el cumpleaños de un salesiano (nombre o comunidad)" value="${esc(S.q.cumpleanos||"")}" aria-label="Buscar cumpleaños"></div></div>`;
   if(q){
-    const res=S.data.salesianos.filter(p=>norm([p.nombre,p.comunidad,p.obra].join(" ")).includes(q)).map(p=>({...p,bd:bdayInfo(p)})).sort((a,b)=>(a.bd?a.bd.days:999)-(b.bd?b.bd.days:999)||a.nombre.localeCompare(b.nombre,"es"));
+    const res=S.data.salesianos.filter(p=>qMatch([p.nombre,p.comunidad,p.obra,p._orig].join(" "),S.q.cumpleanos||"")).map(p=>({...p,bd:bdayInfo(p)})).sort((a,b)=>(a.bd?a.bd.days:999)-(b.bd?b.bd.days:999)||a.nombre.localeCompare(b.nombre,"es"));
     return search+(res.length?`<section class="panel"><div class="panel-head"><h2>Resultados</h2><span class="count">${res.length}</span></div><div class="mini-list">${res.map(p=>`<div class="mini-item"><div class="avatar">${esc(initials(p.nombre))}</div><div class="grow"><div class="t">${esc(p.nombre)}</div><div class="s">${esc([p.comunidad,p.bd&&p.bd.age?(p.bd.days===0?"cumple hoy "+p.bd.age+" años":"cumplirá "+p.bd.age+" años"):""].filter(Boolean).join(" · "))}</div></div>${p.bd?`<span class="chip ${p.bd.days===0?"gold":""}">🎂 ${p.bd.d} de ${MESES[p.bd.m]} · ${esc(relDay(p.bd.days))}</span>`:`<span class="hint">Sin fecha registrada</span>`}</div>`).join("")}</div></section>`:emptyBox("No se encontró ningún salesiano","Revisa el nombre o prueba con el apellido o la comunidad."));
   }
   return search+`${hoy.length?`<section class="bday-today"><div class="cake">${hoy.length}</div><div><p class="eyebrow" style="color:var(--gold)">Cumplen años hoy</p><h2>${hoy.map(p=>esc(p.nombre)).join(", ")}</h2><p class="muted">${hoy.map(p=>esc([p.comunidad,p.bd.age?p.bd.age+" años":""].filter(Boolean).join(", "))).join(" · ")}</p></div></section>`:""}
