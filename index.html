@@ -478,7 +478,7 @@ function fraseDelDia(t){ const d=new Date(t+"T12:00:00"), y0=new Date(d.getFullY
 const COMUNIDADES = ["Medellín – Casa Inspectorial","Barranquilla","Cali – Centro de Capacitación Don Bosco","Cali – Instituto San Juan Bosco","Cartagena","Condoto","Copacabana – Posnoviciado","Eje Cafetero","Ibagué","La Ceja – Colegio Santo Domingo Savio","La Ceja – Noviciado","Medellín – Ciudad Don Bosco","Medellín – El Sufragio","Medellín – Instituto Pedro Justo Berrío","Pasto","Popayán","Rionegro – Prenoviciado","Tuluá"];
 const COM_OTROS = "Otros servicios e inspectorías", COM_PERM = "Salesianos con permiso";
 const COMUNIDADES_ALL = [...COMUNIDADES, COM_OTROS, COM_PERM];
-const TEL_PROT = {salesianos:true, formandos:true};
+const TEL_PROT = {salesianos:true, formandos:true, consejo:true};
 const ETAPAS = ["Aspirantado","Prenoviciado","Noviciado","Posnoviciado","Tirocinio","Teología","Formación específica de coadjutores","Otra etapa"];
 const MESES = ["enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre"];
 const MES3 = ["ENE","FEB","MAR","ABR","MAY","JUN","JUL","AGO","SEP","OCT","NOV","DIC"];
@@ -556,7 +556,7 @@ const SCHEMAS = {
     {k:"cargo",l:"Cargo",hint:"Ej.: Rector Mayor, Vicario, Consejero regional para Interamérica."},
     {k:"region",l:"Región o sector"},
     {k:"pais",l:"País de origen"},
-    {k:"telefono",l:"Teléfono",type:"tel"},
+    {k:"telefono",l:"Teléfono",type:"tel",prot:true},
     {k:"correo",l:"Correo",type:"email"},
     {k:"notas",l:"Notas",type:"textarea"}
   ]},
@@ -694,7 +694,7 @@ async function decryptAllTels(){ if(!S.telKey) return; for(const col of Object.k
 function telLockBtn(){ if(PUBLIC_MODE) return S.privOpen?`<button class="btn small" data-act="lockTel">${svg("lock")} Ocultar datos protegidos</button>`:`<button class="btn small" data-act="unlockTel">${svg("lock")} Ver teléfonos con código</button>`; return S.telKey?`<button class="btn small" data-act="lockTel">${svg("lock")} Ocultar teléfonos</button>`:`<button class="btn small" data-act="unlockTel">${svg("lock")} Ver teléfonos con código</button>`; }
 function unlockDialog(after){
   showDialog(`<form class="dlg" id="tlForm"><div class="dlg-head"><h2>${PUBLIC_MODE&&!S.privOpen?"Datos protegidos":"Teléfonos protegidos"}</h2><button type="button" class="icon-btn" data-act="closeDlg" aria-label="Cerrar">${svg("x")}</button></div>
-    <div class="dlg-body"><p class="muted">${PUBLIC_MODE&&!S.privOpen?"Los teléfonos de los salesianos y el elenco de formandos están protegidos.":"Los teléfonos de los salesianos y de los formandos están protegidos."} Escribe el código que entrega la Delegación de Comunicaciones.</p>
+    <div class="dlg-body"><p class="muted">${PUBLIC_MODE&&!S.privOpen?"Los teléfonos de los salesianos y del Consejo General, y el elenco de formandos, están protegidos.":"Los teléfonos de los salesianos, del Consejo General y de los formandos están protegidos."} Escribe el código que entrega la Delegación de Comunicaciones.</p>
     <div class="field"><label for="tl_code">Código</label><input class="input" id="tl_code" autocomplete="off" autocapitalize="characters" spellcheck="false"></div><p class="err" id="tl_err" hidden></p></div>
     <div class="dlg-foot"><button type="button" class="btn" data-act="closeDlg">Cancelar</button><button class="btn primary" type="submit" id="tl_go">Ver teléfonos</button></div></form>`);
   $("#tlForm").addEventListener("submit",async ev=>{ ev.preventDefault(); const code=$("#tl_code").value, er=$("#tl_err");
