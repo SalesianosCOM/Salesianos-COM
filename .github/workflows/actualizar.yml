@@ -265,7 +265,11 @@ jobs:
                   if n["id"] in cur or k in tit: continue
                   if not n["orden"]: base += 1; n["orden"] = base
                   cur[n["id"]] = n; tit[k] = n["id"]; nuevas += 1
-              pub["noticias"] = sorted(cur.values(), key=lambda n: (-int(n.get("orden") or 0)))[:20]
+              def ts(n):
+                  try: return int(dt.datetime.strptime(str(n.get("fecha", ""))[:19], "%Y-%m-%dT%H:%M:%S").replace(tzinfo=dt.timezone.utc).timestamp())
+                  except ValueError: return 0
+              for n in cur.values(): n["orden"] = ts(n)  # el orden sigue siempre la fecha de publicacion
+              pub["noticias"] = sorted(cur.values(), key=lambda n: (-n["orden"], n["id"]))[:20]
               return {"fuente": fuente, "nuevas": nuevas, "total": len(pub["noticias"]), "del_dia": pub["noticias"][0]["titulo"] if pub["noticias"] else ""}
 
           # ---------- Boletines (Issuu): InfoCOM y Boletín Salesiano ----------
