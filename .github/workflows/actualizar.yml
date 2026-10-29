@@ -210,6 +210,12 @@ jobs:
                   out.append({"id": f"ans-{num}", "titulo": tit.strip(), "pais": pais.strip(), "enlace": link, "fecha": fecha,
                               "imagen": img, "resumen": resumen(intro), "orden": num, "fuente": "ANS"})
               return out
+          def sin_fuente(t):
+              return re.sub(r"(\s+[-–|]\s+(ANS|iNfo ?ANS|Agen[cz]i[ae] iNfo Salesiana|Ag[eê]ncia iNfo Salesiana|iNfo Salesian[ae] Agency|infoans\.org)\b[^-–|]*)+\s*$", "", str(t or ""), flags=re.I).strip()
+          def separar_pais(title):
+              m = re.match(r"^([A-ZÁÉÍÓÚÑ][^–\-:]{1,30}?)\s+[–-]\s+(.+)$", title)
+              if m and len(m.group(1).split()) <= 4: return m.group(1).strip(), m.group(2).strip()
+              return "", title
           def parse_respaldo(kind, raw):
               """Items de Bing News / Google News que apuntan a infoans.org (en espanol)."""
               x = raw.decode("utf-8", "replace"); out = []
@@ -222,11 +228,10 @@ jobs:
                   src = (re.search(r'<source[^>]*url="([^"]+)"', it) or [None, ""])[1]
                   if "infoans.org" not in real and "infoans.org" not in src: continue
                   if "infoans.org" in real and "/es/" not in real: continue
-                  title = re.sub(r"(\s+[-–|]\s+(ANS|iNfo ?ANS|Agencia iNfo Salesiana|infoans\.org))+\s*$", "", title, flags=re.I).strip()
+                  title = sin_fuente(title)
                   try: fecha = email.utils.parsedate_to_datetime(g("pubDate")).astimezone(dt.timezone.utc).strftime("%Y-%m-%dT%H:%M:%S.000Z")
                   except Exception: fecha = NOW
-                  pais, tit = (title.split(" – ", 1) + [""])[:2] if " – " in title else ("", title)
-                  if not tit: tit, pais = title, ""
+                  pais, tit = separar_pais(title)
                   desc = clean(re.sub(r"<!\[CDATA\[|\]\]>", "", html.unescape(g("description"))))
                   if kind == "google" or desc.startswith(title): desc = ""
                   img = (re.search(r"<News:Image>(.*?)</News:Image>", it, flags=re.S) or [None, ""])[1].strip()
@@ -237,12 +242,22 @@ jobs:
                               "orden": int(n.group(1)) if n else 0, "fuente": "ANS"})
               return out
           def sync_noticias(pub, raws, respaldo=None):
-              cur = {n["id"]: n for n in pub.get("noticias", [])}
-              tit = {norm(n.get("titulo")): k for k, n in cur.items()}
+              cur = {}
+              for n in pub.get("noticias", []):  # limpia titulos guardados con la marca de la fuente
+                  t = sin_fuente(n.get("titulo"))
+                  if t != n.get("titulo"):
+                      n["titulo"] = t
+                      if not n.get("pais"): n["pais"], n["titulo"] = separar_pais(t)
+                  cur[n["id"]] = n
+              tit = {}
+              for k, n in sorted(cur.items(), key=lambda kv: -int(kv[1].get("orden") or 0)):
+                  kk = norm(n.get("titulo"))
+                  if kk in tit: del cur[k]; continue
+                  tit[kk] = k
               nuevas = 0; fuente = "infoans"
               items = [n for raw in raws for n in parse_rss(raw)]
-              if not items and respaldo:
-                  fuente = "respaldo"; items = respaldo
+              if not items:
+                  fuente = "respaldo" if respaldo else "ninguna"; items = respaldo or []
               sin_num = sorted([n for n in items if not n["orden"]], key=lambda n: n["fecha"])
               base = max([int(n.get("orden") or 0) for n in cur.values()] + [0])
               for n in [n for n in items if n["orden"]] + sin_num:
