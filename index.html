@@ -1013,7 +1013,7 @@ const OBRA_RULES = [
   [/\bbarranquilla\b/,["o001","o002","o003","o047"]],[/\b(csdb|centro social)\b/,["o001"]],[/\bsan roque\b/,["o003"]],
   [/\bcali\b/,["o004","o005","o006","o007","o008","o009","o048"]],[/\bccdb\b/,["o004","o005"]],[/\b(iti|i\.? ?san bosco)\b/,["o007","o008"]],
   [/\b(quilichao|villa don bosco)\b/,["o010"]],
-  [/\b(cartagena|costa)\b/,["o011","o012","o013","o014"]],[/\b(c?spc|cssp?c|csp|san pedro claver|escuelas)\b/,["o011"]],[/\b(eps|escuelas profesionales)\b/,["o012","o013"]],[/\bencarnacion\b/,["o014"]],
+  [/\b(cartagena|costa)\b/,["o011","o012","o013","o014"]],[/\bcosta\b/,["o002"]],[/\b(c?spc|cssp?c|csp|san pedro claver|escuelas)\b/,["o011"]],[/\b(eps|escuelas profesionales)\b/,["o012","o013"]],[/\bencarnacion\b/,["o014"]],
   [/\bcondoto\b/,["o015","o016"]],
   [/\bposnoviciado\b/,["o017","o018"]],[/\bvilla de sales\b/,["o019"]],[/\bcopacabana\b/,["o017","o018","o019"]],
   [/\beje( cafetero)?\b/,["o020","o021","o022","o023","o049"]],[/\barmenia\b/,["o020"]],[/\bdosquebradas\b/,["o021","o049"]],
@@ -1029,9 +1029,9 @@ const OBRA_RULES = [
 
 /* lenguaje unificado: siglas de obras y sectores → nombre completo */
 const SIGLAS_OBRAS = {CCDB:"Centro de Capacitación Don Bosco",CEDBOS:"Centro Educacional Don Bosco",CDB:"Ciudad Don Bosco",PJB:"Pedro Justo Berrío",CSDB:"Centro Social Don Bosco",CSDS:"Colegio Santo Domingo Savio",CDS:"Colegio Santo Domingo Savio",SDS:"Santo Domingo Savio",CSPC:"Colegio Salesiano San Pedro Claver",CSSPC:"Colegio Salesiano San Pedro Claver",CSP:"Colegio Salesiano San Pedro Claver",SPC:"Colegio Salesiano San Pedro Claver",EPS:"Escuelas Profesionales Salesianas",CSF:"Centro Salesiano de Formación",IEDB:"Institución Educativa Don Bosco",PSFS:"Parroquia San Francisco de Sales",PSJB:"Parroquia San Juan Bosco",PSR:"Parroquia San Roque",CSSJB:"Colegio San Juan Bosco",CSJB:"Colegio San Juan Bosco",SJB:"San Juan Bosco",DBT:"Don Bosco Tech"};
-const SIGLAS_AREAS = {GH:"Gestión Humana",SST:"Seguridad y Salud en el Trabajo",PJS:"Pastoral Juvenil Salesiana",MJS:"Movimiento Juvenil Salesiano",ERE:"Educación Religiosa Escolar",FLIA:"Familia",SDB:"Salesianos de Don Bosco",FMA:"Hijas de María Auxiliadora",UPS:"Universidad Pontificia Salesiana",ETDH:"Educación para el Trabajo y el Desarrollo Humano",CIE:"Comisión Inspectorial de Educación"};
+const SIGLAS_AREAS = {GH:"Gestión Humana",SST:"Seguridad y Salud en el Trabajo",PJS:"Pastoral Juvenil Salesiana",MJS:"Movimiento Juvenil Salesiano",ERE:"Educación Religiosa Escolar",FLIA:"Familia",SDB:"Salesianos de Don Bosco",FMA:"Hijas de María Auxiliadora",UPS:"Universidad Pontificia Salesiana",ETDH:"Educación para el Trabajo y el Desarrollo Humano",CIE:"Comisión Inspectorial de Educación",SGIC:"Sistema de Gestión Integrado de Calidad",VEXCOM:"Visita Extraordinaria a la COM",CIF:"Comisión Inspectorial de Formación",CIFASA:"Consulta Inspectorial de la Familia Salesiana",CIPJ:"Comisión Inspectorial de Pastoral Juvenil",CIPJS:"Comisión Inspectorial de Pastoral Juvenil",ESA:"Escuela Salesiana de América",COSTA:"Costa (Barranquilla y Cartagena)"};
 const SIGLAS_ALL = {...SIGLAS_OBRAS,...SIGLAS_AREAS};
-const SIGLAS_PRE = [[/Berr[ìi]o`?/g,"Berrío"],[/\bSSt\b/g,"SST"],[/\bTul[uú]a\b/g,"Tuluá"],[/\bPopayan\b/g,"Popayán"],[/\bcartagena\b/g,"Cartagena"],[/\bPARROQUIA\b/g,"Parroquia"],[/\bSUFRAGIO\b/g,"El Sufragio"],[/ Y (AMBIENTAL|Ambiental)\b/g," y Ambiental"],[/\bA ITI\b/g,"a ITI"],[/\bVisista\b/g,"Visita"],[/\bIE(?= Don Bosco)/g,"Institución Educativa"],[/\bDB\b/g,"Don Bosco"],[/\bEJE\b/g,"Eje Cafetero"],[/\bCALI\b/g,"Cali"],[/(Centro Educacional Don Bosco)\s*[–-]\s*CEDBOS\b/g,"$1"],[/Medellín (CDB|PJB)\b/g,"Medellín ($1)"]];
+const SIGLAS_PRE = [[/Berr[ìi]o`?/g,"Berrío"],[/\bD\.\s*(?=[A-ZÁÉÍÓÚ])/g,"Dimensión de "],[/\bSSt\b/g,"SST"],[/\bTul[uú]a\b/g,"Tuluá"],[/\bPopayan\b/g,"Popayán"],[/\bcartagena\b/g,"Cartagena"],[/\bPARROQUIA\b/g,"Parroquia"],[/\bSUFRAGIO\b/g,"El Sufragio"],[/ Y (AMBIENTAL|Ambiental)\b/g," y Ambiental"],[/\bA ITI\b/g,"a ITI"],[/\bVisista\b/g,"Visita"],[/\bIE(?= Don Bosco)/g,"Institución Educativa"],[/\bDB\b/g,"Don Bosco"],[/\bEJE\b/g,"Eje Cafetero"],[/\bCALI\b/g,"Cali"],[/(Centro Educacional Don Bosco)\s*[–-]\s*CEDBOS\b/g,"$1"],[/Medellín (CDB|PJB)\b/g,"Medellín ($1)"]];
 const SIGLAS_POST = [[/\b(?:Instituto Salesiano|ITI Salesiano|Colegio) Pedro Justo Berrío/g,"Instituto Pedro Justo Berrío"],[/(?<!Instituto |Comunidad |\()Pedro Justo Berrío/g,"Instituto Pedro Justo Berrío"],[/(?<!Santo )\bDomingo Savio\b/g,"Santo Domingo Savio"],[/\bEscuelas\b(?! Profesionales)/g,"Escuelas Profesionales Salesianas"],[/\bITI\b(?! San Juan Bosco| Salesiano)/g,"ITI San Juan Bosco"]];
 function expandSiglas(s, dict){
   if(!s||typeof s!=="string") return s;
@@ -1055,6 +1055,8 @@ function unify(key, arr){
 function qMatch(text, raw){
   const W=x=>" "+norm(x).replace(/[^a-z0-9ñ@.]+/g," ").trim();
   const h=W(text)+" ", q=W(raw); if(q===" ") return true;
+  const sig=SIGLAS_ALL[String(raw).trim().toUpperCase()];
+  if(sig) return h.includes(q+" ")||h.includes(W(sig)); /* una sigla busca la palabra exacta, no el comienzo de otra */
   if(h.includes(q)) return true;
   const qx=W(String(raw).replace(/\b[A-Za-z]{2,7}\b/g, w=>SIGLAS_ALL[w.toUpperCase()]||w));
   return qx!==q && h.includes(qx);
