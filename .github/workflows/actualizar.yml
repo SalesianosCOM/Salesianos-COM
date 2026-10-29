@@ -32,7 +32,7 @@ jobs:
           # 1) Cronograma: lee el calendario publicado de Outlook (ICS) y sincroniza pub.actividades.
           # 2) Noticias: lee los RSS de ANS (infoans.org) y renueva pub.noticias (las 20 mas recientes).
           # Los datos privados (cifrados) y el resto de colecciones no se tocan.
-          import json, re, sys, os, html, hashlib, unicodedata, datetime as dt, urllib.request, email.utils
+          import json, re, sys, os, html, hashlib, unicodedata, datetime as dt, urllib.request, urllib.error, urllib.parse, email.utils
           from zoneinfo import ZoneInfo
           import icalendar, recurring_ical_events
 
@@ -40,15 +40,30 @@ jobs:
           ICS_URL = "https://outlook.office365.com/owa/calendar/02acdab834ce4676857e12695837ac90@salesianos.edu.co/8301883b39d244dc80d4622cf15bd2ba10116462702916673404/calendar.ics"
           RSS = ["https://www.infoans.org/es/secciones/noticias?format=feed&type=rss",
                  "https://www.infoans.org/es/secciones/fotonoticias?format=feed&type=rss"]
+          # Respaldo cuando infoans.org no permite la descarga automatica (HTTP 403):
+          # los RSS publicos de noticias de Bing y Google, que enlazan a los articulos de ANS en espanol.
+          RSS_RESPALDO = [("bing", "https://www.bing.com/news/search?q=site%3Ainfoans.org%2Fes&format=rss&setlang=es-CO&cc=CO"),
+                          ("bing", "https://www.bing.com/news/search?q=%22ANS%22+infoans.org&format=rss&setlang=es-CO&cc=CO"),
+                          ("google", "https://news.google.com/rss/search?q=site:infoans.org+when:21d&hl=es-419&gl=CO&ceid=CO:es-419")]
           ORIGEN = "Cronograma Inspectorial (Outlook)"
           BOG = ZoneInfo("America/Bogota")
           NOW = dt.datetime.now(dt.timezone.utc).strftime("%Y-%m-%dT%H:%M:%S.000Z")
           TODAY = dt.datetime.now(BOG).date()
 
-          def get(url, src=None):
+          def get(url, src=None, tries=3, timeout=90, headers=None):
               if src: return open(src, "rb").read()
-              req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0 (SalesianosCOM-bot; +https://salesianoscom.github.io/Salesianos-COM/)"})
-              with urllib.request.urlopen(req, timeout=60) as r: return r.read()
+              h = headers or {"User-Agent": "Mozilla/5.0 (SalesianosCOM-bot; +https://salesianoscom.github.io/Salesianos-COM/)"}
+              last = None
+              for i in range(tries):
+                  try:
+                      with urllib.request.urlopen(urllib.request.Request(url, headers=h), timeout=timeout) as r: return r.read()
+                  except urllib.error.HTTPError as ex:
+                      last = ex
+                      if ex.code in (401, 403, 404): break
+                  except Exception as ex:
+                      last = ex
+                  import time; time.sleep(5 * (i + 1))
+              raise last
 
           # ---------- Cronograma ----------
           def norm(s):
@@ -195,15 +210,48 @@ jobs:
                   out.append({"id": f"ans-{num}", "titulo": tit.strip(), "pais": pais.strip(), "enlace": link, "fecha": fecha,
                               "imagen": img, "resumen": resumen(intro), "orden": num, "fuente": "ANS"})
               return out
-          def sync_noticias(pub, raws):
+          def parse_respaldo(kind, raw):
+              """Items de Bing News / Google News que apuntan a infoans.org (en espanol)."""
+              x = raw.decode("utf-8", "replace"); out = []
+              for it in re.findall(r"<item>(.*?)</item>", x, flags=re.S):
+                  g = lambda tag: (re.search(rf"<{tag}[^>]*>(.*?)</{tag}>", it, flags=re.S) or [None, ""])[1]
+                  title = clean(re.sub(r"<!\[CDATA\[|\]\]>", "", g("title")))
+                  link = html.unescape(g("link")).strip()
+                  m = re.search(r"[?&]url=([^&]+)", link)
+                  real = urllib.parse.unquote(m.group(1)) if m else link
+                  src = (re.search(r'<source[^>]*url="([^"]+)"', it) or [None, ""])[1]
+                  if "infoans.org" not in real and "infoans.org" not in src: continue
+                  if "infoans.org" in real and "/es/" not in real: continue
+                  title = re.sub(r"(\s+[-–|]\s+(ANS|iNfo ?ANS|Agencia iNfo Salesiana|infoans\.org))+\s*$", "", title, flags=re.I).strip()
+                  try: fecha = email.utils.parsedate_to_datetime(g("pubDate")).astimezone(dt.timezone.utc).strftime("%Y-%m-%dT%H:%M:%S.000Z")
+                  except Exception: fecha = NOW
+                  pais, tit = (title.split(" – ", 1) + [""])[:2] if " – " in title else ("", title)
+                  if not tit: tit, pais = title, ""
+                  desc = clean(re.sub(r"<!\[CDATA\[|\]\]>", "", html.unescape(g("description"))))
+                  if kind == "google" or desc.startswith(title): desc = ""
+                  img = (re.search(r"<News:Image>(.*?)</News:Image>", it, flags=re.S) or [None, ""])[1].strip()
+                  n = re.search(r"/item/(\d+)-", real)
+                  out.append({"id": f"ans-{n.group(1)}" if n else "ans-" + hashlib.sha1(norm(tit).encode()).hexdigest()[:10],
+                              "titulo": tit.strip(), "pais": pais.strip(), "enlace": real, "fecha": fecha,
+                              "imagen": html.unescape(img), "resumen": resumen(desc) if desc else "",
+                              "orden": int(n.group(1)) if n else 0, "fuente": "ANS"})
+              return out
+          def sync_noticias(pub, raws, respaldo=None):
               cur = {n["id"]: n for n in pub.get("noticias", [])}
-              nuevas = 0
-              for raw in raws:
-                  for n in parse_rss(raw):
-                      if n["id"] in cur: continue
-                      cur[n["id"]] = n; nuevas += 1
-              pub["noticias"] = sorted(cur.values(), key=lambda n: -int(n.get("orden") or 0))[:20]
-              return {"nuevas": nuevas, "total": len(pub["noticias"]), "del_dia": pub["noticias"][0]["titulo"] if pub["noticias"] else ""}
+              tit = {norm(n.get("titulo")): k for k, n in cur.items()}
+              nuevas = 0; fuente = "infoans"
+              items = [n for raw in raws for n in parse_rss(raw)]
+              if not items and respaldo:
+                  fuente = "respaldo"; items = respaldo
+              sin_num = sorted([n for n in items if not n["orden"]], key=lambda n: n["fecha"])
+              base = max([int(n.get("orden") or 0) for n in cur.values()] + [0])
+              for n in [n for n in items if n["orden"]] + sin_num:
+                  k = norm(n["titulo"])
+                  if n["id"] in cur or k in tit: continue
+                  if not n["orden"]: base += 1; n["orden"] = base
+                  cur[n["id"]] = n; tit[k] = n["id"]; nuevas += 1
+              pub["noticias"] = sorted(cur.values(), key=lambda n: (-int(n.get("orden") or 0)))[:20]
+              return {"fuente": fuente, "nuevas": nuevas, "total": len(pub["noticias"]), "del_dia": pub["noticias"][0]["titulo"] if pub["noticias"] else ""}
 
           # ---------- Boletines (Issuu): InfoCOM y Boletín Salesiano ----------
           ISSUU = {"infocom": ("salesianosmedellin", r"^\s*info\s*com\b"),
@@ -307,7 +355,19 @@ jobs:
                   rep["cronograma"] = {"error": str(ex)}; ok = False
               try:
                   srcs = sys.argv[3].split(",") if len(sys.argv) > 3 else [None] * len(RSS)
-                  rep["noticias"] = sync_noticias(pub, [get(u, s) for u, s in zip(RSS, srcs)])
+                  raws, errs = [], []
+                  for u, s_ in zip(RSS, srcs):
+                      try: raws.append(get(u, s_, tries=2))
+                      except Exception as ex: errs.append(f"infoans: {ex}")
+                  raws = [r for r in raws if b"<item>" in r]
+                  resp = []
+                  if not raws:
+                      for kind, u in RSS_RESPALDO:
+                          try: resp += parse_respaldo(kind, get(u, tries=2))
+                          except Exception as ex: errs.append(f"{kind}: {ex}")
+                          if len(resp) >= 8: break
+                  rep["noticias"] = sync_noticias(pub, raws, resp)
+                  if errs: rep["noticias"]["avisos"] = errs
               except Exception as ex:
                   rep["noticias"] = {"error": str(ex)}; ok = False
               try:
