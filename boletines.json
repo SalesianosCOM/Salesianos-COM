@@ -70,6 +70,20 @@
   "portadaLocal": "portadas/is-infocom_enero.jpg"
  },
  {
+  "id": "is-boletin_302_interactivo_real",
+  "tipo": "salesiano",
+  "titulo": "Boletín Salesiano Ed. 302",
+  "numero": "302",
+  "fecha": "2026-11-05",
+  "enlace": "https://issuu.com/boletinsalesianocolombia/docs/boletin_302_interactivo_real",
+  "portada": "https://image.isu.pub/261105204508-36118f35cc9bafd4a006a068df5a7428/jpg/page_1_thumb_large.jpg",
+  "resumen": "Edición del Boletín Salesiano Colombia, disponible para leer en Issuu.",
+  "fuente": "Issuu",
+  "createdAt": "2026-11-06T11:16:02.000Z",
+  "updatedAt": "2026-11-06T11:16:02.000Z",
+  "portadaLocal": "portadas/is-boletin_302_interactivo_real.jpg"
+ },
+ {
   "id": "is-boletin_salesiano_301",
   "tipo": "salesiano",
   "titulo": "Boletín Salesiano Ed. 301",
